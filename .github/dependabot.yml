@@ -4,10 +4,21 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-plugin-*"
+          - "@typescript-eslint/*"
+          - "typescript-eslint"
   - package-ecosystem: cargo
     directory: /rust
     schedule:
       interval: weekly
+    groups:
+      oxc:
+        patterns:
+          - "oxc_*"
   - package-ecosystem: github-actions
     directory: /
     schedule:
