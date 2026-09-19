@@ -56,8 +56,6 @@ sandbox verification. Check `.env.example` for the full list — most variables 
 4. Write a clear PR description: what breaks today, what changes, how you tested it.
 5. For scanner/check changes, add or update a fixture under `fixtures/` where practical.
 
-Commits must not carry AI co-author trailers — the CI `check-coauthor` job blocks them.
-
 ## What's worth contributing
 
 - New readiness/security checks with evidence-backed findings
