@@ -1,0 +1,28 @@
+name: E2E smoke (nightly)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+
+# Checkout and a Playwright run against a public URL — nothing here writes to the repository.
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Playwright public smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.3.1
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Smoke
+        run: npm run test:e2e:smoke
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ secrets.PLAYWRIGHT_BASE_URL }}
+        # When PLAYWRIGHT_BASE_URL is unset, playwright.config starts local vite.
+        continue-on-error: false

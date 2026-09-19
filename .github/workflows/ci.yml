@@ -1,0 +1,221 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# No job writes through GITHUB_TOKEN. The workflow token gets read access and nothing else, so a
+# compromised build step cannot commit, tag, publish, or deploy as us.
+permissions:
+  contents: read
+
+jobs:
+  check-coauthor:
+    name: Block AI co-author trailers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.3.1
+        with:
+          fetch-depth: 0
+
+      - name: Check commit messages
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          if [ -z "$BASE_SHA" ] || [ "$BASE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            RANGE="$HEAD_SHA"
+          else
+            RANGE="$BASE_SHA..$HEAD_SHA"
+          fi
+
+          PATTERN='^Co-authored-by:.*(claude|chatgpt|gpt-|copilot|codex|cursor|anthropic|openai|gemini)'
+          MATCHES=$(git log "$RANGE" --format='--- %H ---%n%B' | grep -iE "$PATTERN" -B5 || true)
+
+          if [ -n "$MATCHES" ]; then
+            echo "::error::AI co-author trailer found in commit message(s):"
+            echo "$MATCHES"
+            exit 1
+          fi
+          echo "No AI co-author trailers found."
+
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.3.1
+        with:
+          # Full history: a credential that was committed and later deleted still lives in
+          # the pack, and `git log` on a shallow clone would report a clean tree.
+          fetch-depth: 0
+
+      - name: Scan every commit for secrets
+        env:
+          GITLEAKS_VERSION: 8.24.3
+        run: |
+          url="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -fsSL "$url" | tar -xz -C /usr/local/bin gitleaks
+          gitleaks --version
+          # Fail closed: any finding, or any error, aborts the job (gitleaks exits non-zero
+          # on both). --redact keeps the secret out of the public build log.
+          gitleaks detect --source . --no-banner --redact --verbose
+
+  ci:
+    name: Lint & Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.3.1
+
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "22"
+
+      # `npm run build` → ensure-wasm → wasm:build needs rustc + wasm-pack (pkg/ is gitignored).
+      - name: Install Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add wasm32-unknown-unknown
+
+      - name: Install wasm-pack
+        env:
+          WASM_PACK_VERSION: v0.15.0
+        run: |
+          url="https://github.com/rustwasm/wasm-pack/releases/download/${WASM_PACK_VERSION}/wasm-pack-${WASM_PACK_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          curl -fsSL "$url" | tar -xz --strip-components=1 -C /usr/local/bin \
+            "wasm-pack-${WASM_PACK_VERSION}-x86_64-unknown-linux-musl/wasm-pack"
+          wasm-pack --version
+
+      - uses: actions/cache@v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            rust/target
+          key: cargo-ci-${{ runner.os }}-${{ hashFiles('rust/Cargo.lock') }}
+          restore-keys: cargo-ci-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Docs in sync
+        run: npm run docs:check
+
+      # Must precede Typecheck: pkg/ is gitignored, so on a fresh checkout the app's
+      # `import … from "rust/crates/indexer/pkg/…"` is TS2307 until the artifact exists. Build
+      # rebuilds it via ensure-wasm, but that runs after — leaving the gate below unpassable.
+      - name: Build the WASM artifact
+        run: npm run wasm:build
+
+      # `vite build` does not typecheck, so without this step type errors reach main unnoticed —
+      # which is exactly how a batch of them accumulated before this job existed.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Fixture matrix
+        run: npm run test:fixtures
+
+      - name: Build
+        run: npm run build
+
+      - name: Production startup smoke
+        run: npm run test:production-start
+
+  rust:
+    name: Rust indexer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.3.1
+
+      # The crate must keep building for wasm32 — the Worker loads it as WASM, and a native-only
+      # dependency would not surface in any other job.
+      - name: Install Rust
+        run: |
+          rustup toolchain install stable --profile minimal --component clippy,rustfmt
+          rustup default stable
+          rustup target add wasm32-unknown-unknown
+
+      - uses: actions/cache@v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            rust/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('rust/Cargo.lock') }}
+          restore-keys: cargo-${{ runner.os }}-
+
+      - name: Format
+        run: cargo fmt --all --check --manifest-path rust/Cargo.toml
+
+      - name: Clippy
+        run: cargo clippy --manifest-path rust/Cargo.toml --all-targets -- -D warnings
+
+      - name: Test
+        run: cargo test --manifest-path rust/Cargo.toml
+
+      - name: Build for wasm32
+        run: >
+          cargo build --manifest-path rust/Cargo.toml --lib --features wasm
+          --target wasm32-unknown-unknown
+
+  rust-parity:
+    name: Rust ⇄ TS parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.3.1
+
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "22"
+
+      - name: Install Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add wasm32-unknown-unknown
+
+      # Official prebuilt binary rather than `cargo install` (slow) or a third-party action.
+      - name: Install wasm-pack
+        env:
+          WASM_PACK_VERSION: v0.15.0
+        run: |
+          url="https://github.com/rustwasm/wasm-pack/releases/download/${WASM_PACK_VERSION}/wasm-pack-${WASM_PACK_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          curl -fsSL "$url" | tar -xz --strip-components=1 -C /usr/local/bin \
+            "wasm-pack-${WASM_PACK_VERSION}-x86_64-unknown-linux-musl/wasm-pack"
+          wasm-pack --version
+
+      - uses: actions/cache@v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            rust/target
+          key: cargo-parity-${{ runner.os }}-${{ hashFiles('rust/Cargo.lock') }}
+          restore-keys: cargo-parity-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Both parity suites are gated: rust-backend.test.ts on the native binary, wasm.test.ts on the
+      # wasm-pack artifact. Without these builds they silently pass while testing nothing.
+      - name: Build the native indexer
+        run: npm run rust:build
+
+      - name: Build the WASM artifact
+        run: npm run wasm:build
+
+      - name: Verify both artifacts exist so parity cannot silently skip
+        run: |
+          test -x rust/target/release/lr-indexer || {
+            echo "::error::lr-indexer missing — native parity suite would skip"; exit 1; }
+          test -f rust/crates/indexer/pkg/launchreadyy_indexer_bg.wasm || {
+            echo "::error::wasm artifact missing — wasm parity suite would skip"; exit 1; }
+
+      - name: Rust/TS parity tests
+        run: npx vitest run src/lib/indexer src/lib/graph

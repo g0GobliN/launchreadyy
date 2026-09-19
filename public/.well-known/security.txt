@@ -1,0 +1,4 @@
+Contact: mailto:launchreadyy@gmail.com
+Expires: 2027-06-27T00:00:00.000Z
+Preferred-Languages: en
+Policy: https://github.com/g0GobliN/launchreadyy/blob/main/SECURITY.md

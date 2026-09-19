@@ -1,0 +1,991 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-critical: var(--critical);
+  --color-critical-foreground: var(--critical-foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-data: var(--data);
+  --color-data-foreground: var(--data-foreground);
+  --color-hairline: var(--hairline);
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+}
+
+:root {
+  color-scheme: light;
+  --radius: 8px;
+  --background: #f7f7f5;
+  --foreground: #121212;
+  --body: #3d3d3d;
+  --surface: #ffffff;
+  --surface-foreground: #121212;
+  --card: #ffffff;
+  --card-foreground: #121212;
+  --popover: #ffffff;
+  --popover-foreground: #121212;
+  --primary: #00e5a8;
+  --primary-foreground: #041510;
+  --secondary: #efefec;
+  --secondary-foreground: #121212;
+  --muted: #efefec;
+  --muted-foreground: #7a7a7a;
+  --accent: #e8faf5;
+  --accent-foreground: #0f766e;
+  --destructive: #e11d48;
+  --destructive-foreground: #ffffff;
+  --success: #00c990;
+  --success-foreground: #041510;
+  --warning: #d4a017;
+  --warning-foreground: #121212;
+  --critical: #e11d48;
+  --critical-foreground: #ffffff;
+  --border: rgba(18, 18, 18, 0.08);
+  --input: rgba(18, 18, 18, 0.16);
+  --ring: #00e5a8;
+  --cta: #121212;
+  --on-cta: #f7f7f5;
+  --invert: #2a2a2c;
+  --on-invert: #f7f7f5;
+  --canvas-wash: #efefec;
+  --film-matte: #0a0a0a;
+  --iso-ink: #2a2a2c;
+  --iso-neutral: #8b8f9a;
+  --header-glass: rgba(247, 247, 245, 0.82);
+  --ghost-border: rgba(18, 18, 18, 0.16);
+  --app-sidebar: #f0f0ed;
+  --app-terminal: #f7f7f5;
+  --app-terminal-text: #121212;
+  --app-terminal-muted: #7a7a7a;
+  --app-terminal-border: rgba(18, 18, 18, 0.1);
+}
+
+/* Near-black canvas; mint remains the only chroma. */
+.dark {
+  color-scheme: dark;
+  --background: #050506;
+  --foreground: #f4f4f2;
+  --body: #b4b4b0;
+  --surface: #0d0d0f;
+  --surface-foreground: #f4f4f2;
+  --card: #0d0d0f;
+  --card-foreground: #f4f4f2;
+  --popover: #121214;
+  --popover-foreground: #f4f4f2;
+  --primary: #00e5a8;
+  --primary-foreground: #041510;
+  --secondary: #161618;
+  --secondary-foreground: #f4f4f2;
+  --muted: #161618;
+  --muted-foreground: #8a8a86;
+  --accent: #0d281f;
+  --accent-foreground: #00e5a8;
+  --destructive: #f43f5e;
+  --destructive-foreground: #ffffff;
+  --success: #00c990;
+  --success-foreground: #041510;
+  --warning: #eab308;
+  --warning-foreground: #121212;
+  --critical: #f43f5e;
+  --critical-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #00e5a8;
+  --cta: #f4f4f2;
+  --on-cta: #050506;
+  --invert: #000000;
+  --on-invert: #f4f4f2;
+  --canvas-wash: #0a0a0b;
+  --film-matte: #000000;
+  --iso-ink: #f4f4f2;
+  --iso-neutral: #6b6b70;
+  --header-glass: rgba(5, 5, 6, 0.82);
+  --ghost-border: rgba(255, 255, 255, 0.14);
+  --app-sidebar: #030304;
+  --app-terminal: #020203;
+  --app-terminal-text: #e6e8ee;
+  --app-terminal-muted: #8b8d99;
+  --app-terminal-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Shared brand typography — Manrope / Newsreader / JetBrains Mono everywhere. */
+.marketing-shell,
+.app-shell,
+.runway-paper {
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+
+.marketing-shell h1,
+.marketing-shell h2,
+.marketing-shell h3,
+.marketing-shell h4,
+.app-shell h1,
+.app-shell h2,
+.app-shell h3,
+.app-shell h4,
+.runway-paper h1,
+.runway-paper h2,
+.runway-paper h3,
+.runway-paper h4,
+.font-display {
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.marketing-shell code,
+.marketing-shell pre,
+.marketing-shell .font-mono,
+.app-shell code,
+.app-shell pre,
+.app-shell .font-mono,
+.runway-paper code,
+.runway-paper pre,
+.runway-paper .font-mono {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Landing keeps the class for animation hooks; tokens are global now. */
+.runway-paper {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.btn-cta {
+  background-color: var(--cta);
+  color: var(--on-cta);
+  border-radius: 9999px;
+}
+
+.btn-cta:hover {
+  opacity: 0.9;
+}
+
+.btn-ghost-pill {
+  border: 1px solid var(--ghost-border);
+  border-radius: 9999px;
+  color: var(--foreground);
+  background: transparent;
+}
+
+.btn-ghost-pill:hover {
+  background: var(--muted);
+}
+
+.btn-clear {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: 9999px;
+}
+
+.btn-clear:hover {
+  background-color: #00c990;
+}
+
+.text-body {
+  color: var(--body);
+}
+
+/* Inverse bands — force light ink (beat base h1–h4 foreground). */
+.invert-band {
+  background-color: var(--invert);
+  color: var(--on-invert);
+}
+
+.invert-band h1,
+.invert-band h2,
+.invert-band h3,
+.invert-band h4 {
+  color: var(--on-invert);
+}
+
+.invert-band p,
+.invert-band li,
+.invert-band span,
+.invert-band a {
+  color: inherit;
+}
+
+.invert-band .invert-muted {
+  color: color-mix(in srgb, var(--on-invert) 68%, transparent) !important;
+}
+
+.invert-band .invert-faint {
+  color: color-mix(in srgb, var(--on-invert) 48%, transparent) !important;
+}
+
+.invert-band .text-primary {
+  color: var(--primary) !important;
+}
+
+.invert-band .btn-clear {
+  color: var(--primary-foreground);
+}
+
+/* Primary nav/action chips → CTA token (ink ↔ paper). */
+header a.bg-primary {
+  background-color: var(--cta) !important;
+  color: var(--on-cta) !important;
+  border-radius: 9999px;
+}
+
+header.sticky {
+  background-color: var(--header-glass);
+  border-color: var(--border);
+}
+
+@keyframes runway-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes runway-score {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.runway-rise {
+  animation: runway-rise 0.65s ease-out both;
+  animation-delay: var(--rise-delay, 0s);
+}
+
+.runway-score-in {
+  animation: runway-score 0.7s ease-out 0.35s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runway-rise,
+  .runway-score-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Product dashboard ---------------------------------------------------------------
+ * Scoped independently from marketing pages. The class is applied to body by
+ * DashboardThemeBoundary so Radix portals inherit the same tokens as the shell.
+ * .app-shell repeats the tokens for the server-rendered first frame.
+ */
+body.dashboard-theme,
+.app-shell {
+  --radius: 14px;
+  --background: #f7f7f5;
+  --foreground: #111113;
+  --body: #3f3f46;
+  --surface: #ffffff;
+  --surface-foreground: #111113;
+  --card: #ffffff;
+  --card-foreground: #111113;
+  --popover: #ffffff;
+  --popover-foreground: #111113;
+  --secondary: #f0f0ed;
+  --secondary-foreground: #111113;
+  --muted: #f0f0ed;
+  --muted-foreground: #6b6b72;
+  --accent: #e5f8f2;
+  --accent-foreground: #007c5d;
+  --primary: #00e5a8;
+  --primary-foreground: #041510;
+  --success: #009f77;
+  --success-foreground: #ffffff;
+  --warning: #111113;
+  --warning-foreground: #ffffff;
+  --critical: #111113;
+  --critical-foreground: #ffffff;
+  --destructive: #111113;
+  --destructive-foreground: #ffffff;
+  --data: #008f6b;
+  --data-foreground: #ffffff;
+  --ring: #00b989;
+  --border: rgba(17, 17, 19, 0.1);
+  --hairline: rgba(17, 17, 19, 0.075);
+  --input: rgba(17, 17, 19, 0.16);
+  --app-sidebar: #f2f2ef;
+  --app-header: rgba(247, 247, 245, 0.8);
+  --app-shadow: 0 1px 2px rgba(17, 17, 19, 0.03), 0 18px 45px -30px rgba(17, 17, 19, 0.28);
+  --app-shadow-float: 0 18px 55px -24px rgba(17, 17, 19, 0.28);
+  --app-terminal: #09090b;
+  --app-terminal-text: #f4f4f5;
+  --app-terminal-muted: #92929b;
+  --app-terminal-border: rgba(255, 255, 255, 0.09);
+  --app-font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --app-font-serif: "Newsreader", ui-serif, Georgia, serif;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.dark body.dashboard-theme,
+.dark .app-shell {
+  --background: #070708;
+  --foreground: #f5f5f3;
+  --body: #b7b7b4;
+  --surface: #0f0f12;
+  --surface-foreground: #f5f5f3;
+  --card: #0f0f12;
+  --card-foreground: #f5f5f3;
+  --popover: #151519;
+  --popover-foreground: #f5f5f3;
+  --secondary: #18181d;
+  --secondary-foreground: #f5f5f3;
+  --muted: #19191e;
+  --muted-foreground: #9b9ba2;
+  --accent: #0d281f;
+  --accent-foreground: #00e5a8;
+  --primary: #00e5a8;
+  --primary-foreground: #041510;
+  --success: #00e5a8;
+  --success-foreground: #041510;
+  --warning: #f5f5f3;
+  --warning-foreground: #070708;
+  --critical: #f5f5f3;
+  --critical-foreground: #070708;
+  --destructive: #f5f5f3;
+  --destructive-foreground: #070708;
+  --data: #00e5a8;
+  --data-foreground: #041510;
+  --ring: #00e5a8;
+  --border: rgba(255, 255, 255, 0.1);
+  --hairline: rgba(255, 255, 255, 0.07);
+  --input: rgba(255, 255, 255, 0.15);
+  --app-sidebar: #0b0b0d;
+  --app-header: rgba(7, 7, 8, 0.76);
+  --app-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 20px 55px -34px rgba(0, 0, 0, 0.9);
+  --app-shadow-float: 0 22px 70px -28px rgba(0, 0, 0, 0.9);
+}
+
+.app-shell {
+  font-family: var(--app-font-sans);
+  font-size: 14px;
+  letter-spacing: -0.011em;
+}
+
+body.dashboard-theme {
+  font-family: var(--app-font-sans);
+  letter-spacing: -0.011em;
+}
+
+.app-shell :is(h1, h2, h3, h4, .font-display),
+body.dashboard-theme :is(h1, h2, h3, h4, .font-display) {
+  font-family: var(--app-font-sans);
+}
+
+.app-shell .font-serif,
+body.dashboard-theme .font-serif,
+.app-metric-serif {
+  font-family: var(--app-font-serif);
+  letter-spacing: -0.025em;
+}
+
+.app-shell :is(button, a, input, select, textarea):focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px color-mix(in oklab, var(--data) 78%, transparent);
+}
+
+.app-glass {
+  background: var(--app-header);
+  backdrop-filter: saturate(170%) blur(20px);
+}
+
+.app-panel {
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  box-shadow: var(--app-shadow);
+}
+
+.app-data-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--data) 8%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--data) 8%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 28px 28px;
+}
+
+/* Bring workflow controls into the shared radius system without affecting public pages. */
+:is(body.dashboard-theme, .app-shell) .rounded-\[4px\],
+:is(body.dashboard-theme, .app-shell) .rounded-\[5px\],
+:is(body.dashboard-theme, .app-shell) .rounded-\[6px\] {
+  border-radius: 0.75rem;
+}
+
+:is(body.dashboard-theme, .app-shell) .rounded-\[8px\] {
+  border-radius: 1rem;
+}
+
+:is(body.dashboard-theme, .app-shell) :is(.bg-card, .bg-surface) {
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.app-terminal {
+  background: var(--app-terminal);
+  color: var(--app-terminal-text);
+}
+
+/* Body / muted copy stays deliberate at smaller sizes. Base layer only — any
+   explicit font-* utility on an element still wins. */
+@layer base {
+  :is(.text-xs, .text-sm, .text-base, .text-lg, .text-\[10px\], .text-\[11px\], .text-\[13px\]),
+  .text-muted-foreground,
+  .text-body {
+    font-weight: 500;
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+  }
+  * {
+    border-color: var(--color-border);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: var(--color-foreground);
+  }
+  code,
+  pre,
+  .font-mono {
+    font-family: "JetBrains Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+  }
+}
+
+@utility glow-primary {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 0 0 1px color-mix(in oklab, var(--color-primary) 25%, transparent);
+}
+
+@utility grid-bg {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-border) 80%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-border) 80%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 48px 48px;
+}
+
+@utility text-gradient {
+  background: linear-gradient(135deg, #00e5a8 0%, #00c990 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@utility live-dot {
+  animation: live-pulse 3s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% {
+    width: 5%;
+    margin-left: 0;
+  }
+  50% {
+    width: 60%;
+    margin-left: 20%;
+  }
+  100% {
+    width: 5%;
+    margin-left: 95%;
+  }
+}
+
+@keyframes status-tab-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes status-tab-progress {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+    opacity: 0.4;
+  }
+}
+
+/* Scrolls an 800-wide SVG (two identical 400-wide units) by exactly one unit
+   width, so the heartbeat-monitor loop on the error page has no visible seam. */
+@keyframes heartbeat-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Hero diagram animations ── */
+/* Chips keep their Tailwind rotate-* (v4 native `rotate` property), so only transform moves */
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes hero-draw {
+  from {
+    stroke-dashoffset: 420;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hero-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility hero-chip-float {
+  animation: hero-float 4s ease-in-out infinite;
+  animation-delay: var(--hero-delay, 0s);
+}
+
+@utility hero-line-draw {
+  stroke-dasharray: 420;
+  animation: hero-draw 1.6s ease-out 0.5s both;
+}
+
+@utility hero-score-pop {
+  animation: hero-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1.9s both;
+}
+
+@utility hero-block-rise {
+  animation: hero-rise 0.7s ease-out both;
+  animation-delay: var(--hero-delay, 0s);
+}
+
+/* How-it-works marquee — scroll left */
+@keyframes how-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-33.333%, 0, 0);
+  }
+}
+
+@utility how-marquee {
+  animation: how-marquee 36s linear infinite;
+  will-change: transform;
+}
+
+/* Stack tiles — keycap-style plates: lit top edge, shadowed base, lift on hover.
+   Transform lives here and the entry animation on the parent, so the running
+   animation never overrides the hover transform. */
+@utility stack-tile {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--color-surface) 94%, white),
+    color-mix(in oklab, var(--color-surface) 90%, black)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 14%, transparent),
+    0 2px 4px color-mix(in oklab, black 16%, transparent);
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.stack-tile:hover {
+  transform: translateY(-3px);
+  color: var(--color-foreground);
+  border-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 20%, transparent),
+    0 10px 20px -8px color-mix(in oklab, var(--color-primary) 60%, transparent);
+}
+
+/* Scroll-reveal safety net.
+
+   Reveals ship as inline `opacity:0` in the server-rendered HTML and rely on JS
+   to fade them in, so if hydration never happens — JS disabled, bundle blocked,
+   network died mid-load — everything below the hero stays permanently blank.
+
+   React adds .js-ready on mount. If that class never arrives, this forces the
+   content visible. Animation fill-mode outranks inline styles, so a late-arriving
+   bundle can't re-hide anything that has already been shown. */
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+html:not(.js-ready) [data-reveal] {
+  animation: reveal-failsafe 0.4s ease-out 2.5s forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not(.js-ready) [data-reveal] {
+    animation-duration: 0.01s;
+  }
+}
+
+/* Road matrix stream — motion now comes from SVG <animateMotion> in the markup,
+   because iOS Safari ignores CSS offset-path on SVG elements while still
+   claiming support for it. Reduced motion is handled in React, which skips
+   rendering the stream entirely. */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-chip-float,
+  .hero-line-draw,
+  .hero-score-pop,
+  .hero-block-rise,
+  .how-marquee {
+    animation: none;
+  }
+
+  .stack-tile {
+    transition: none;
+  }
+
+  .stack-tile:hover {
+    transform: none;
+  }
+
+  /* Belt-and-braces: hides the stream in server-rendered HTML before React
+     resolves the motion preference and stops rendering it. */
+  .road-stream-char {
+    visibility: hidden;
+  }
+}
+
+/* Global press feedback — every button and link gets a tactile scale-down on click */
+@layer base {
+  button:not(:disabled),
+  a[href],
+  label[for],
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:not(:disabled):active,
+  a[href]:active,
+  [role="button"]:active {
+    transform: scale(0.97);
+    transition: transform 60ms ease-out;
+  }
+  button,
+  a[href],
+  [role="button"] {
+    transition:
+      transform 120ms ease-out,
+      opacity 120ms ease-out;
+  }
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* App shell is h-svh + overflow:hidden — that clips print to 1 page. */
+  .h-svh,
+  .h-dvh,
+  .h-screen,
+  .h-full,
+  .min-h-0,
+  .min-h-screen,
+  .overflow-hidden,
+  .overflow-y-auto,
+  .overflow-x-hidden,
+  #root,
+  .app-shell,
+  .app-shell *,
+  [data-app-scroll] {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .print-hide {
+    display: none !important;
+  }
+
+  /* Report lifted to <body> before print — hide everything else. */
+  body.is-printing-launch-report > *:not(.launch-report-document) {
+    display: none !important;
+  }
+
+  .launch-report-document {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: black !important;
+    background: white !important;
+    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    /* Keep the verdict band, severity rails and score dial coloured on paper. */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    /* Paper is always the light document, even when the app is in dark mode.
+       Tailwind resolves its --color-* theme tokens at :root, so both the raw
+       tokens and the --color-* aliases have to be restated here. */
+    --background: #ffffff;
+    --foreground: #121212;
+    --body: #3d3d3d;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --muted: #ececea;
+    --muted-foreground: #5f5f5f;
+    --border: rgba(18, 18, 18, 0.16);
+    --primary: #00a97e;
+    --success: #00996f;
+    --warning: #b07d0a;
+    --critical: #d11a44;
+    --color-background: #ffffff;
+    --color-foreground: #121212;
+    --color-card: #ffffff;
+    --color-card-foreground: #121212;
+    --color-surface: #ffffff;
+    --color-surface-foreground: #121212;
+    --color-secondary: #f2f2ef;
+    --color-secondary-foreground: #121212;
+    --color-muted: #ececea;
+    --color-muted-foreground: #5f5f5f;
+    --color-border: rgba(18, 18, 18, 0.16);
+    --color-primary: #00a97e;
+    --color-primary-foreground: #ffffff;
+    --color-success: #00996f;
+    --color-warning: #b07d0a;
+    --color-critical: #d11a44;
+  }
+
+  /* Screen-only atmosphere (blur washes) muddies print. */
+  .report-decor {
+    display: none !important;
+  }
+
+  .launch-report-document * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .launch-report-document h1,
+  .launch-report-document h2,
+  .launch-report-document .font-display {
+    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .launch-report-document .rounded-2xl,
+  .launch-report-document .rounded-xl,
+  .launch-report-document .rounded-lg {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .report-no-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .report-allow-break {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+}
+
+/* ── Home editorial (Cursor-like) — scoped to `/` via .home-editorial ── */
+.home-editorial {
+  color-scheme: dark;
+  --background: #050506;
+  --foreground: #f4f4f2;
+  --body: #b4b4b0;
+  --surface: #0d0d0f;
+  --primary: #00e5a8;
+  --primary-foreground: #041510;
+  --muted-foreground: #8a8a86;
+  --border: rgba(255, 255, 255, 0.08);
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+
+.home-editorial .font-display,
+.home-editorial h1,
+.home-editorial h2,
+.home-editorial h3 {
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.home-editorial .home-media-frame {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0a0a0b;
+  border-radius: 2px;
+}
+
+/* Section rhythm — separates stacked blocks without heavy chrome */
+.home-editorial .home-section {
+  padding-block: 5rem;
+  background: transparent;
+}
+
+.home-editorial .home-section--muted {
+  background: color-mix(in oklab, #ffffff 2.2%, #050506);
+}
+
+@media (min-width: 640px) {
+  .home-editorial .home-section {
+    padding-block: 7rem;
+  }
+}
+
+@keyframes home-step-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.home-editorial .home-step-progress {
+  animation: home-step-progress 4.8s linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-editorial .home-step-progress {
+    animation: none;
+    width: 100%;
+  }
+}

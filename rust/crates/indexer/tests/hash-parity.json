@@ -1,0 +1,42 @@
+[
+  {
+    "input": "",
+    "hex": "811c9dc5"
+  },
+  {
+    "input": "a",
+    "hex": "e40c292c"
+  },
+  {
+    "input": "hello",
+    "hex": "4f9f2cab"
+  },
+  {
+    "input": "hello world",
+    "hex": "d58b3fa7"
+  },
+  {
+    "input": "The quick brown fox jumps over the lazy dog",
+    "hex": "048fff90"
+  },
+  {
+    "input": "café",
+    "hex": "3308be7c"
+  },
+  {
+    "input": "你好世界",
+    "hex": "1cfda414"
+  },
+  {
+    "input": "😀🎉",
+    "hex": "07bbe09f"
+  },
+  {
+    "input": "line1\nline2\n",
+    "hex": "9d6d9f0e"
+  },
+  {
+    "input": "const key = 'AKIAIOSFODNN7EXAMPLE';",
+    "hex": "f588e2a6"
+  }
+]

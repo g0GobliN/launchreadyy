@@ -1,0 +1,1 @@
+{"name":"fx-astro","dependencies":{"astro":"^4.0.0"},"scripts":{"build":"astro build"}}

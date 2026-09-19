@@ -1,0 +1,35 @@
+name: Detection baseline (nightly)
+
+# Deliberately not on push. The fixtures are `--depth 1` clones of 27 third-party repos, so their
+# contents move whenever those upstreams commit — a Dockerfile added to someone else's project
+# would fail every PR here for a reason nobody in this repo can fix. Nightly instead: drift still
+# gets reported the next morning, and merges stay decoupled from other people's repositories.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *"
+
+# This job checks out, installs, clones public fixtures and reads them. It never writes to the
+# repository, so the token gets nothing more than that. Also the rule this product ships as
+# `workflow-permissions` — a new workflow here should not be something our own scanner flags.
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    name: Scan-detection regression guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.3.1
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "22"
+      - run: npm ci
+
+      - name: Clone real fixtures
+        run: bash scripts/clone-real-fixtures.sh
+
+      # Exits 1 on any drift. A failure here is either a real detection regression or an
+      # intentional change that still needs `npx tsx scripts/scan-baseline.ts write` committing.
+      - name: Check against committed baseline
+        run: npx tsx scripts/scan-baseline.ts check

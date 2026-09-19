@@ -1,0 +1,20 @@
+[workspace]
+resolver = "2"
+members = ["crates/indexer"]
+
+# LaunchReadyy Rust workspace (v2 Phase 5).
+# Purpose: accelerate repository *analysis only* — file indexing, hashing, traversal, secret
+# pre-filtering, AST import extraction, dependency-graph edge extraction. Business logic stays in
+# TypeScript.
+#
+# Builds:
+#   native  : cargo build --release -p launchreadyy-indexer   (runs in the E2B sandbox / deep tier)
+#   wasm    : wasm-pack build crates/indexer --target web      (bounded indexing operations)
+#
+# Every algorithm here has a TypeScript reference implementation in src/lib/indexer/. Rust is a
+# drop-in accelerator gated by `flag_rust_indexer`; when the artifact is absent, the TS path runs.
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

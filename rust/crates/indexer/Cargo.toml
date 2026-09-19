@@ -1,0 +1,25 @@
+[package]
+name = "launchreadyy-indexer"
+version = "0.1.0"
+edition = "2021"
+description = "Accelerated repository indexing/hashing for LaunchReadyy (v2 Phase 5). Analysis only."
+license = "Apache-2.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# wasm-bindgen is optional so the crate builds as a plain native rlib without it.
+wasm-bindgen = { version = "0.2", optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+regex = "1"
+oxc_parser = "0.142.0"
+oxc_allocator = "0.142.0"
+oxc_span = "0.142.0"
+oxc_ast = "0.142.0"
+oxc_ast_visit = "0.142.0"
+
+[features]
+default = []
+wasm = ["dep:wasm-bindgen"]

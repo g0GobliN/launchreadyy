@@ -1,0 +1,1 @@
+{"name":"fx-express","dependencies":{"express":"^4.18.0"},"scripts":{"start":"node index.js","test":"echo ok"}}

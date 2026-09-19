@@ -1,0 +1,72 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+playwright-report
+test-results
+.output
+.vinxi
+.tanstack/**
+.nitro
+*.local
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Local database — runtime state created by the app, never source
+data/*.db
+data/*.sqlite
+data/*.db-shm
+data/*.db-wal
+data/*.db-journal
+data/*.sqlite-shm
+data/*.sqlite-wal
+data/*.sqlite-journal
+
+# Local CLI configuration (may contain tokens/keys)
+data/config.json
+
+# npm pack test artifact — never commit
+*.tgz
+
+# Editor / agent tooling state
+.freebuff/
+.utim_tmp/
+.tmp-debug.mjs
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.claude
+.cursor
+.vscode
+.codex
+.agents
+.tanstack
+
+# Rust (v2 indexer) — build output only; source + Cargo.lock are tracked
+rust/target/
+rust/crates/indexer/pkg/
+**/*.rs.bk
+# Fixture local build caches (never commit)
+fixtures/**/.gradle/
+fixtures/**/target/
+fixtures/**/*.class
+.scratch/

@@ -1,0 +1,4 @@
+* text=auto eol=lf
+
+# Auto-generated — exclude from GitHub language stats and collapse in diffs.
+src/routeTree.gen.ts linguist-generated=true

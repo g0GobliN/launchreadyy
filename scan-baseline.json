@@ -1,0 +1,1154 @@
+{
+  "csharp-app": {
+    "score": 40,
+    "framework": "C#",
+    "profile": ".NET service",
+    "fixIds": [
+      "dependency-audit-ci",
+      "docker-root-user",
+      "dockerfile",
+      "env-example-ai",
+      "health-check",
+      "helmet",
+      "rate-limit",
+      "readme",
+      "workflow-permissions",
+      "xunit-ai"
+    ],
+    "categories": {
+      "Security": 53,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 85,
+      "CI/CD": 100,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "depth-csharp": {
+    "score": 48,
+    "framework": "C#",
+    "profile": ".NET service",
+    "fixIds": [
+      "auditor-todo-markers",
+      "cors",
+      "dependency-audit-ci",
+      "dockerfile",
+      "env-example-ai",
+      "health-check",
+      "helmet",
+      "workflow-permissions"
+    ],
+    "categories": {
+      "Security": 68,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 92,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "depth-express": {
+    "score": 78,
+    "framework": "Express",
+    "profile": "Express API",
+    "fixIds": [
+      "ci-ai",
+      "health-check",
+      "monitoring",
+      "security-csrf",
+      "security-unsafe-api"
+    ],
+    "categories": {
+      "Security": 84,
+      "Environment setup": 100,
+      "Error handling": 84,
+      "Testing": 100,
+      "CI/CD": 85,
+      "Deployment readiness": 100,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "depth-java": {
+    "score": 40,
+    "framework": "Java",
+    "profile": "Java service",
+    "fixIds": [
+      "cors",
+      "dependency-audit-ci",
+      "docker-root-user",
+      "env-example-ai",
+      "health-check",
+      "helmet",
+      "rate-limit",
+      "workflow-permissions",
+      "workflow-unpinned-action"
+    ],
+    "categories": {
+      "Security": 37,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 100,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "depth-php": {
+    "score": 39,
+    "framework": "PHP",
+    "profile": "PHP app",
+    "fixIds": [
+      "dependency-audit-ci",
+      "dockerfile",
+      "env-example-ai",
+      "gitignore-env",
+      "health-check",
+      "readme",
+      "workflow-unpinned-action"
+    ],
+    "categories": {
+      "Security": 59,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "depth-python": {
+    "score": 40,
+    "framework": "Python",
+    "profile": "Python service",
+    "fixIds": [
+      "auditor-env-undocumented",
+      "cors",
+      "docker-root-user",
+      "env-example-ai",
+      "github-actions",
+      "health-check",
+      "helmet",
+      "pytest",
+      "rate-limit",
+      "readme",
+      "ruff",
+      "security-jwt"
+    ],
+    "categories": {
+      "Security": 46,
+      "Environment setup": 70,
+      "Error handling": 92,
+      "Testing": 85,
+      "CI/CD": 85,
+      "Deployment readiness": 100,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "depth-ruby": {
+    "score": 46,
+    "framework": "Ruby",
+    "profile": "Ruby app",
+    "fixIds": [
+      "cors",
+      "dockerfile",
+      "env-example-ai",
+      "github-actions",
+      "health-check",
+      "helmet",
+      "rate-limit",
+      "rubocop",
+      "security-jwt"
+    ],
+    "categories": {
+      "Security": 54,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "depth-rust": {
+    "score": 40,
+    "framework": "Rust",
+    "profile": "Rust service",
+    "fixIds": [
+      "cors",
+      "dependency-audit-ci",
+      "dockerfile",
+      "env-example-ai",
+      "health-check",
+      "helmet",
+      "rate-limit",
+      "readme",
+      "workflow-permissions"
+    ],
+    "categories": {
+      "Security": 53,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "echo-app": {
+    "score": 48,
+    "framework": "Go",
+    "profile": "Go service",
+    "fixIds": [
+      "dependency-audit-ci",
+      "docker-root-user",
+      "env-example-ai",
+      "golangci-lint",
+      "health-check",
+      "helmet",
+      "rate-limit",
+      "workflow-permissions"
+    ],
+    "categories": {
+      "Security": 53,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 100,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "elixir-app": {
+    "score": 40,
+    "framework": "Elixir",
+    "profile": "Elixir app",
+    "fixIds": [
+      "auditor-env-undocumented",
+      "cors",
+      "credo",
+      "dependency-audit-ci",
+      "env-example-ai",
+      "health-check",
+      "helmet",
+      "rate-limit",
+      "workflow-permissions",
+      "workflow-unpinned-action"
+    ],
+    "categories": {
+      "Security": 45,
+      "Environment setup": 70,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 100,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "express-plain": {
+    "score": 36,
+    "framework": "Express",
+    "profile": "Express API",
+    "fixIds": [
+      "api-tests",
+      "ci-ai",
+      "cors",
+      "env-example-ai",
+      "eslint",
+      "gitignore-env",
+      "health-check",
+      "helmet",
+      "logger",
+      "monitoring",
+      "rate-limit",
+      "security-unsafe-api"
+    ],
+    "categories": {
+      "Security": 36,
+      "Environment setup": 85,
+      "Error handling": 84,
+      "Testing": 100,
+      "CI/CD": 85,
+      "Deployment readiness": 100,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 77,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "express-tsc": {
+    "score": 58,
+    "framework": "Express",
+    "profile": "Express API",
+    "fixIds": [
+      "ci-ai",
+      "dockerfile",
+      "env-example-ai",
+      "health-check",
+      "monitoring",
+      "rate-limit"
+    ],
+    "categories": {
+      "Security": 85,
+      "Environment setup": 85,
+      "Error handling": 84,
+      "Testing": 100,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "go-app": {
+    "score": 50,
+    "framework": "Go",
+    "profile": "Go service",
+    "fixIds": [
+      "dependency-audit-ci",
+      "docker-root-user",
+      "env-example-ai",
+      "golangci-lint",
+      "helmet",
+      "workflow-permissions",
+      "workflow-unpinned-action"
+    ],
+    "categories": {
+      "Security": 60,
+      "Environment setup": 85,
+      "Error handling": 100,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 100,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "java-app": {
+    "score": 40,
+    "framework": "Java",
+    "profile": "Java service",
+    "fixIds": [
+      "auditor-api-validation",
+      "checkstyle",
+      "cors",
+      "dockerfile",
+      "env-example-ai",
+      "github-actions",
+      "helmet",
+      "rate-limit",
+      "readme"
+    ],
+    "categories": {
+      "Security": 69,
+      "Environment setup": 85,
+      "Error handling": 100,
+      "Testing": 100,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 85,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "kotlin-app": {
+    "score": 58,
+    "framework": "Kotlin",
+    "profile": "Kotlin service",
+    "fixIds": [
+      "dependency-audit-ci",
+      "docker-root-user",
+      "env-example-ai",
+      "health-check",
+      "readme",
+      "workflow-permissions"
+    ],
+    "categories": {
+      "Security": 76,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 100,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "laravel-11": {
+    "score": 46,
+    "framework": "PHP",
+    "profile": "React SPA",
+    "fixIds": [
+      "cors",
+      "dependency-audit-ci",
+      "dockerfile",
+      "health-check",
+      "helmet",
+      "monitoring",
+      "readme-ai",
+      "security-auth-guard",
+      "security-csrf"
+    ],
+    "categories": {
+      "Security": 53,
+      "Environment setup": 100,
+      "Error handling": 84,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "mern-step": {
+    "score": 40,
+    "framework": "Express",
+    "profile": "Express API",
+    "fixIds": [
+      "api-tests",
+      "auditor-env-undocumented",
+      "ci-ai",
+      "cors",
+      "dockerfile",
+      "env-example-ai",
+      "eslint",
+      "health-check",
+      "helmet",
+      "logger",
+      "monitoring",
+      "rate-limit",
+      "readme-ai"
+    ],
+    "categories": {
+      "Security": 69,
+      "Environment setup": 70,
+      "Error handling": 84,
+      "Testing": 100,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 77,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "nextjs-app": {
+    "score": 36,
+    "framework": "Next.js",
+    "profile": "Next.js + Stripe",
+    "fixIds": [
+      "ci-ai",
+      "dockerfile",
+      "error-boundary",
+      "gitignore-env",
+      "helmet",
+      "monitoring",
+      "playwright-ai",
+      "security-cookie-flags",
+      "vitest-ai"
+    ],
+    "categories": {
+      "Security": 59,
+      "Environment setup": 100,
+      "Error handling": 92,
+      "Testing": 77,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 92,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "php-app": {
+    "score": 66,
+    "framework": "PHP",
+    "profile": "PHP app",
+    "fixIds": [
+      "dependency-audit-ci",
+      "env-example-ai",
+      "health-check",
+      "workflow-permissions",
+      "workflow-unpinned-action"
+    ],
+    "categories": {
+      "Security": 76,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 100,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "python-app": {
+    "score": 40,
+    "framework": "Python",
+    "profile": "Python service",
+    "fixIds": [
+      "dockerfile",
+      "env-example-ai",
+      "github-actions",
+      "health-check",
+      "helmet",
+      "pytest",
+      "rate-limit",
+      "readme",
+      "security-jwt"
+    ],
+    "categories": {
+      "Security": 62,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 85,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "python-fastapi": {
+    "score": 40,
+    "framework": "Python",
+    "profile": "Python service",
+    "fixIds": [
+      "cors",
+      "dependency-audit-ci",
+      "docker-root-user",
+      "health-check",
+      "helmet",
+      "rate-limit",
+      "readme",
+      "workflow-permissions",
+      "workflow-unpinned-action"
+    ],
+    "categories": {
+      "Security": 37,
+      "Environment setup": 100,
+      "Error handling": 92,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 100,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "react-axios": {
+    "score": 40,
+    "framework": "React",
+    "profile": "React SPA",
+    "fixIds": [
+      "auditor-localhost-api",
+      "ci-ai",
+      "dockerfile",
+      "env-example-ai",
+      "eslint",
+      "monitoring",
+      "playwright-ai",
+      "prettier",
+      "readme-ai",
+      "vitest-ai"
+    ],
+    "categories": {
+      "Security": 100,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 77,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 85,
+      "Performance": 100,
+      "Maintainability": 82
+    },
+    "warnings": []
+  },
+  "ruby-app": {
+    "score": 64,
+    "framework": "Ruby",
+    "profile": "Ruby app",
+    "fixIds": [
+      "dockerfile",
+      "env-example-ai",
+      "github-actions",
+      "health-check",
+      "rspec",
+      "rubocop"
+    ],
+    "categories": {
+      "Security": 100,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 85,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "rust-app": {
+    "score": 56,
+    "framework": "Rust",
+    "profile": "Rust service",
+    "fixIds": [
+      "cargo-test-ai",
+      "cors",
+      "dockerfile",
+      "github-actions",
+      "health-check",
+      "helmet",
+      "rate-limit"
+    ],
+    "categories": {
+      "Security": 69,
+      "Environment setup": 100,
+      "Error handling": 92,
+      "Testing": 85,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "stripe-server": {
+    "score": 40,
+    "framework": "Express",
+    "profile": "Express API",
+    "fixIds": [
+      "api-tests",
+      "auditor-env-undocumented",
+      "ci-ai",
+      "cors",
+      "dockerfile",
+      "env-example-ai",
+      "eslint",
+      "health-check",
+      "helmet",
+      "logger",
+      "monitoring",
+      "rate-limit",
+      "security-unsafe-api",
+      "stripe-webhook-verify"
+    ],
+    "categories": {
+      "Security": 46,
+      "Environment setup": 70,
+      "Error handling": 84,
+      "Testing": 100,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 77,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "t3-app": {
+    "score": 26,
+    "framework": "Next.js",
+    "profile": "Next.js App",
+    "fixIds": [
+      "auditor-prisma-migrations",
+      "ci-ai",
+      "dockerfile",
+      "error-boundary",
+      "eslint",
+      "gitignore-env",
+      "helmet",
+      "monitoring",
+      "playwright-ai",
+      "readme-ai",
+      "vitest-ai"
+    ],
+    "categories": {
+      "Security": 67,
+      "Environment setup": 100,
+      "Error handling": 92,
+      "Testing": 77,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 85,
+      "API reliability": 100,
+      "Frontend UX basics": 92,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "taxonomy": {
+    "score": 40,
+    "framework": "Next.js",
+    "profile": "Next.js + Stripe",
+    "fixIds": [
+      "auditor-auth-routes",
+      "ci-ai",
+      "dockerfile",
+      "error-boundary",
+      "helmet",
+      "monitoring",
+      "playwright-ai",
+      "vitest-ai"
+    ],
+    "categories": {
+      "Security": 77,
+      "Environment setup": 100,
+      "Error handling": 92,
+      "Testing": 77,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 92,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": []
+  },
+  "edge-docs": {
+    "score": 0,
+    "framework": "unknown",
+    "profile": "General Node",
+    "fixIds": [],
+    "categories": {
+      "Security": 100,
+      "Environment setup": 100,
+      "Error handling": 100,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 100,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": [
+      "UNSUPPORTED_REPO: No application detected — this repository has no recognizable manifest or source files, so there is nothing to score yet. Connect a repo containing your app, or set the app directory in settings if it lives in a subfolder.",
+      "No package.json found — only basic checks were run."
+    ]
+  },
+  "edge-empty": {
+    "score": 0,
+    "framework": "unknown",
+    "profile": "General Node",
+    "fixIds": [],
+    "categories": {
+      "Security": 100,
+      "Environment setup": 100,
+      "Error handling": 100,
+      "Testing": 100,
+      "CI/CD": 100,
+      "Deployment readiness": 100,
+      "Documentation": 100,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 100
+    },
+    "warnings": [
+      "UNSUPPORTED_REPO: No application detected — this repository has no recognizable manifest or source files, so there is nothing to score yet. Connect a repo containing your app, or set the app directory in settings if it lives in a subfolder.",
+      "No package.json found — only basic checks were run."
+    ]
+  },
+  "mono-npm": {
+    "score": 40,
+    "framework": "Next.js",
+    "profile": "Next.js App",
+    "fixIds": [
+      "ci-ai",
+      "dockerfile",
+      "env-example-ai",
+      "error-boundary",
+      "eslint",
+      "helmet",
+      "monitoring",
+      "playwright-ai",
+      "readme-ai",
+      "vitest-ai"
+    ],
+    "categories": {
+      "Security": 92,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 77,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 92,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": [
+      "No application at the repository root — scanned `apps/web` instead. Other apps found but not scanned: packages/ui. Set the app directory in repo settings to scan a different one. Secret scanning still covers the whole repository. One-click fixes that write config files (Dockerfile, CI, linters, tests) are unavailable for subdirectory apps, because they would be committed to the repository root instead of next to your app — the findings below still tell you what to fix."
+    ]
+  },
+  "mono-nx": {
+    "score": 40,
+    "framework": "Vite",
+    "profile": "React SPA",
+    "fixIds": [
+      "ci-ai",
+      "dockerfile",
+      "env-example-ai",
+      "eslint",
+      "monitoring",
+      "playwright-ai",
+      "prettier",
+      "readme-ai",
+      "vitest-ai"
+    ],
+    "categories": {
+      "Security": 100,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 77,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 82
+    },
+    "warnings": [
+      "No application at the repository root — scanned `apps/store` instead. Other apps found but not scanned: libs/shared. Set the app directory in repo settings to scan a different one. Secret scanning still covers the whole repository. One-click fixes that write config files (Dockerfile, CI, linters, tests) are unavailable for subdirectory apps, because they would be committed to the repository root instead of next to your app — the findings below still tell you what to fix."
+    ]
+  },
+  "mono-pnpm": {
+    "score": 40,
+    "framework": "Express",
+    "profile": "Express API",
+    "fixIds": [
+      "api-tests",
+      "ci-ai",
+      "cors",
+      "dockerfile",
+      "env-example-ai",
+      "eslint",
+      "health-check",
+      "helmet",
+      "logger",
+      "monitoring",
+      "rate-limit",
+      "readme-ai",
+      "ts-strict"
+    ],
+    "categories": {
+      "Security": 69,
+      "Environment setup": 85,
+      "Error handling": 84,
+      "Testing": 100,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 77,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 84
+    },
+    "warnings": [
+      "No application at the repository root — scanned `apps/api` instead. Other apps found but not scanned: apps/web. Set the app directory in repo settings to scan a different one. Secret scanning still covers the whole repository. One-click fixes that write config files (Dockerfile, CI, linters, tests) are unavailable for subdirectory apps, because they would be committed to the repository root instead of next to your app — the findings below still tell you what to fix."
+    ]
+  },
+  "mono-polyglot": {
+    "score": 46,
+    "framework": "Go",
+    "profile": "Go service",
+    "fixIds": [
+      "cors",
+      "dockerfile",
+      "env-example-ai",
+      "github-actions",
+      "go-test-ai",
+      "golangci-lint",
+      "health-check",
+      "helmet",
+      "readme"
+    ],
+    "categories": {
+      "Security": 84,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 85,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": [
+      "No application at the repository root — scanned `services/api` instead. Other apps found but not scanned: web. Set the app directory in repo settings to scan a different one. Secret scanning still covers the whole repository. One-click fixes that write config files (Dockerfile, CI, linters, tests) are unavailable for subdirectory apps, because they would be committed to the repository root instead of next to your app — the findings below still tell you what to fix."
+    ]
+  },
+  "mono-subdir": {
+    "score": 40,
+    "framework": "Python",
+    "profile": "Python service",
+    "fixIds": [
+      "cors",
+      "dockerfile",
+      "env-example-ai",
+      "github-actions",
+      "health-check",
+      "helmet",
+      "pytest",
+      "rate-limit",
+      "readme",
+      "ruff"
+    ],
+    "categories": {
+      "Security": 69,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 85,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": [
+      "No application at the repository root — scanned `backend` instead. Other apps found but not scanned: frontend. Set the app directory in repo settings to scan a different one. Secret scanning still covers the whole repository. One-click fixes that write config files (Dockerfile, CI, linters, tests) are unavailable for subdirectory apps, because they would be committed to the repository root instead of next to your app — the findings below still tell you what to fix."
+    ]
+  },
+  "mono-turbo": {
+    "score": 40,
+    "framework": "Next.js",
+    "profile": "Next.js App",
+    "fixIds": [
+      "ci-ai",
+      "dockerfile",
+      "env-example-ai",
+      "error-boundary",
+      "eslint",
+      "helmet",
+      "monitoring",
+      "playwright-ai",
+      "readme-ai",
+      "vitest-ai"
+    ],
+    "categories": {
+      "Security": 92,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 77,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 92,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": [
+      "No application at the repository root — scanned `apps/docs` instead. Other apps found but not scanned: packages/config. Set the app directory in repo settings to scan a different one. Secret scanning still covers the whole repository. One-click fixes that write config files (Dockerfile, CI, linters, tests) are unavailable for subdirectory apps, because they would be committed to the repository root instead of next to your app — the findings below still tell you what to fix."
+    ]
+  },
+  "probe-sec-root": {
+    "score": 38,
+    "framework": "Python",
+    "profile": "Python service",
+    "fixIds": [
+      "cors",
+      "dockerfile",
+      "env-example-ai",
+      "github-actions",
+      "health-check",
+      "helmet",
+      "pytest",
+      "rate-limit",
+      "readme",
+      "ruff",
+      "security-hardcoded-secret"
+    ],
+    "categories": {
+      "Security": 44,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 85,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": []
+  },
+  "probe-sec-sub": {
+    "score": 38,
+    "framework": "Python",
+    "profile": "Python service",
+    "fixIds": [
+      "cors",
+      "dockerfile",
+      "env-example-ai",
+      "github-actions",
+      "health-check",
+      "helmet",
+      "pytest",
+      "rate-limit",
+      "readme",
+      "ruff",
+      "security-hardcoded-secret"
+    ],
+    "categories": {
+      "Security": 44,
+      "Environment setup": 85,
+      "Error handling": 92,
+      "Testing": 85,
+      "CI/CD": 85,
+      "Deployment readiness": 92,
+      "Documentation": 92,
+      "Database/migration safety": 100,
+      "API reliability": 100,
+      "Frontend UX basics": 100,
+      "Performance": 100,
+      "Maintainability": 92
+    },
+    "warnings": [
+      "No application at the repository root — scanned `backend` instead. Secret scanning still covers the whole repository. One-click fixes that write config files (Dockerfile, CI, linters, tests) are unavailable for subdirectory apps, because they would be committed to the repository root instead of next to your app — the findings below still tell you what to fix."
+    ]
+  }
+}
