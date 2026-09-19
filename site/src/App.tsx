@@ -31,10 +31,12 @@ function Link({
   href,
   children,
   className = "",
+  onNavigate,
 }: {
   href: string;
   children: ReactNode;
   className?: string;
+  onNavigate?: () => void;
 }) {
   const internal = href.startsWith("/");
   return (
@@ -46,6 +48,7 @@ function Link({
           ? (event) => {
               if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
               event.preventDefault();
+              onNavigate?.();
               window.history.pushState({}, "", href);
               window.dispatchEvent(new PopStateEvent("popstate"));
               window.scrollTo({ top: 0, behavior: "instant" });
@@ -60,12 +63,10 @@ function Link({
 
 function Header() {
   const [open, setOpen] = useState(false);
-  const path = usePath();
-  useEffect(() => setOpen(false), [path]);
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link href="/" className="brand">
+        <Link href="/" className="brand" onNavigate={() => setOpen(false)}>
           <img src="/logo/mark-tight.png" alt="" />
           <span>LaunchReadyy</span>
         </Link>
@@ -80,7 +81,7 @@ function Header() {
         </button>
         <nav className={open ? "nav open" : "nav"} aria-label="Main navigation">
           {NAV.map(([href, label]) => (
-            <Link key={href} href={href} className="nav-link">
+            <Link key={href} href={href} className="nav-link" onNavigate={() => setOpen(false)}>
               {label}
             </Link>
           ))}
