@@ -13,6 +13,9 @@ repositories. It scans applications, identifies release risks, verifies builds i
 environments, produces evidence-backed readiness results, and can generate remediation pull
 requests.
 
+The static public website lives in [`site/`](site/README.md) and is deployed separately. The root
+application remains the self-hosted Community Node.js and SQLite product.
+
 It is a single-operator application. You run it locally or on infrastructure you control, connect
 it with your own GitHub token, and optionally supply E2B and AI-provider API keys. Application data
 stays in the local SQLite database.
