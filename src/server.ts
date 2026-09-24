@@ -165,6 +165,15 @@ export async function handleRequest(request: Request): Promise<Response> {
 }
 
 /**
+ * TanStack Start's server entry contract: `vite dev` resolves `server.entry` to this file and
+ * invokes `default.fetch(request)` for every request (see start-plugin-core's dev-server plugin).
+ * The pipeline below — background services, request limits, security headers — is exactly what a
+ * request must pass through, so the default export is `handleRequest` itself.
+ */
+const serverEntry = { fetch: handleRequest };
+export default serverEntry;
+
+/**
  * Boot the HTTP listener when this file is the process entry (`node dist/server/server.js`,
  * which is what `npm start` and `launchreadyy start` run). Imported by `vite dev`, it stays a
  * plain module — otherwise development would try to bind the port Vite already owns.
