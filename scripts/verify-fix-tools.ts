@@ -12,16 +12,31 @@
  * Not part of `npm test` (network + Docker + real toolchains, too slow for the default run) —
  * it needs its own config, because vitest.config.ts only includes src/. Invoke via:
  *
- *   npm run verify:tools                       # all suites, over an hour
+ *   npm run verify:tools                       # all suites
  *   npm run verify:tools -- -t "eslint|ruff"   # one slice
  *
  * Fixtures come from scripts/clone-real-fixtures.sh; set LR_FIXTURES_DIR to point elsewhere.
+ *
+ * Caching: the images, each language's download cache, and the build layer cache are all reused
+ * between runs — see the Caching section below and src/lib/docker-audit-cache.ts. A first run on
+ * a cold machine is the slow one; later runs reuse everything it fetched.
  */
 import fs from "node:fs";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
-import { describe, it, expect } from "vitest";
+import { spawn, spawnSync } from "node:child_process";
+import { describe, it, expect, beforeAll } from "vitest";
 import { parse as parseYaml } from "yaml";
+
+import {
+  buildCacheArgs,
+  buildCommandArgs,
+  cacheMountArgs,
+  cacheVolumeNames,
+  formatBytes,
+  parseBuildCacheMode,
+  pullImagesInParallel,
+  summarizeCacheVolumes,
+} from "../src/lib/docker-audit-cache";
 
 import {
   dockerfile as dockerfileFor,
@@ -80,6 +95,52 @@ const FIXTURES_ROOT =
   process.env.LR_FIXTURES_DIR ?? path.join(process.cwd(), ".scratch/real-fixtures");
 
 const SKIP_DIRS = new Set(["node_modules", ".git", "dist", "build", ".next", "coverage", "out"]);
+
+// ─── Caching ───────────────────────────────────────────────────────────────────
+//
+// Every row runs in a container this harness creates and destroys, so each one used to pay for its
+// own cold start: a fresh dependency download, and for the 12 `docker build` rows an empty layer
+// cache. Both are now paid once per machine instead of once per row.
+//
+// Four independent switches, all defaulting to the cached behaviour:
+//   LR_AUDIT_CACHE=0                    — no toolchain cache volumes
+//   LR_AUDIT_BUILD_CACHE=off|read|read-write  — layer cache for `docker build` (default: read)
+//   LR_AUDIT_WARM=0                     — don't prime the image set before the first row; rows
+//                                         then pull only what they need, which is what a filtered
+//                                         run (`-t`) wants
+//   LR_AUDIT_PULL=0                     — no pulls in the harness at all
+//   LR_AUDIT_CACHE_RESET=1              — drop the toolchain volumes first, because a corrupt
+//                                         download inside a volume outlives the container that
+//                                         wrote it
+
+const cacheSwitchOff = (raw: string | undefined): boolean => /^(0|off|false|no)$/i.test(raw ?? "");
+
+const CACHE_ENABLED = !cacheSwitchOff(process.env.LR_AUDIT_CACHE);
+
+/**
+ * Whether a row may pull. Off only makes a row fall back to what `docker create`/`docker build`
+ * does on its own — an implicit pull — so this is about *how* a missing image is fetched, not
+ * whether it can be.
+ */
+const PULL_ENABLED = !cacheSwitchOff(process.env.LR_AUDIT_PULL);
+const WARM_ENABLED = PULL_ENABLED && !cacheSwitchOff(process.env.LR_AUDIT_WARM);
+
+const BUILD_CACHE_MODE = parseBuildCacheMode(process.env.LR_AUDIT_BUILD_CACHE);
+/**
+ * Under `.scratch/` (gitignored), so a durable build cache is never committed.
+ *
+ * Resolved rather than merely joined: `docker buildx` runs with the work directory as its cwd, so
+ * a relative `LR_FIXTURES_DIR`/`LR_AUDIT_BUILD_CACHE_DIR` would resolve this against the build
+ * context instead of the repository.
+ */
+const BUILD_CACHE_DIR = path.resolve(
+  process.env.LR_AUDIT_BUILD_CACHE_DIR ?? path.join(FIXTURES_ROOT, "..", "docker-build-cache"),
+);
+const BUILD_CACHE_ACTIVE = CACHE_ENABLED && BUILD_CACHE_MODE !== "off";
+
+/** Bounds the warm-up hook only. A full parallel pull of a cold machine's image set is a few
+ * minutes on a normal link; this is the point at which continuing to wait is not worth it. */
+const WARM_TIMEOUT_MS = Number(process.env.LR_AUDIT_PULL_TIMEOUT_MS ?? 30 * 60_000);
 
 function listFiles(root: string): string[] {
   // A missing fixture is the harness's most common failure and its least informative one: the
@@ -264,18 +325,209 @@ function run(cmd: string, args: string[], opts?: { cwd?: string; timeoutMs?: num
  * so it must be loud rather than skipped. `docker info` (not `--version`) because a stopped daemon
  * fails the same way a missing binary does. */
 let dockerUnavailableReason: string | null | undefined;
-function assertDockerAvailable(): void {
+/** The memoized probe, kept accessible to callers that must *tolerate* an absent daemon (the
+ * image warm-up) as well as to assertDockerAvailable, which must not. */
+function dockerProbe(): string | null {
   if (dockerUnavailableReason === undefined) {
     const probe = run("docker", ["info", "--format", "{{.ServerVersion}}"], { timeoutMs: 60_000 });
     dockerUnavailableReason = probe.ok ? null : `${probe.stdout}\n${probe.stderr}`.trim();
   }
-  if (dockerUnavailableReason !== null) {
+  return dockerUnavailableReason;
+}
+function assertDockerAvailable(): void {
+  const reason = dockerProbe();
+  if (reason !== null) {
     throw new Error(
-      `Docker is required for this row and is not usable:\n${dockerUnavailableReason}\n\n` +
+      `Docker is required for this row and is not usable:\n${reason}\n\n` +
         "Start the daemon, or run only the rows that do not need it:\n" +
         '  npm run verify:tools -- -t "auditors"\n' +
         "  npm run verify:mobile",
     );
+  }
+}
+
+/** `run`, but asynchronous so several pulls can be in flight at once.
+ *
+ * Pulling the image set one after another is the difference between a warm-up measured in tens of
+ * seconds and one that outruns the hook timeout — these are multi-hundred-megabyte images and the
+ * bottleneck is the network, not the CPU. */
+function runAsync(cmd: string, args: string[], opts?: { timeoutMs?: number }): Promise<ExecResult> {
+  return new Promise((resolve) => {
+    let settled = false;
+    const done = (result: ExecResult) => {
+      if (settled) return;
+      settled = true;
+      resolve(result);
+    };
+    const child = spawn(cmd, args, { timeout: opts?.timeoutMs ?? 5 * 60_000 });
+    let stdout = "";
+    let stderr = "";
+    child.stdout?.on("data", (chunk) => (stdout += chunk.toString()));
+    child.stderr?.on("data", (chunk) => (stderr += chunk.toString()));
+    child.on("error", (err) =>
+      done({
+        ok: false,
+        stdout,
+        stderr: `${stderr}\n${err.message}`,
+        timedOut: (err as NodeJS.ErrnoException).code === "ETIMEDOUT",
+      }),
+    );
+    child.on("close", (code, signal) =>
+      done({ ok: code === 0, stdout, stderr, timedOut: signal === "SIGTERM" }),
+    );
+  });
+}
+
+let buildxAvailable: boolean | undefined;
+/** Whether the buildx plugin answered. Memoized, and never fatal: without it the build rows still
+ * run, they just cannot import the on-disk layer cache. */
+function hasBuildx(): boolean {
+  if (buildxAvailable === undefined) {
+    buildxAvailable = run("docker", ["buildx", "version"], { timeoutMs: 30_000 }).ok;
+  }
+  return buildxAvailable;
+}
+
+/**
+ * Every image this run can reach for, for the up-front pull.
+ *
+ * Two groups. First the images a *row* passes to a container — fully enumerable from the fixture
+ * tables above, so this list is derived from them rather than restated. Second the base images the
+ * generated Dockerfiles build on: the generators write those themselves, so the only way to know
+ * them without cloning every fixture and running the generator is to read them off the generator
+ * templates once, which is what this list is.
+ *
+ * The point is not to download less — the same bytes are needed either way — but to download them
+ * *in parallel, before the first row*, instead of serially inside one row's timeout budget, where
+ * an 800MB pull is indistinguishable from a hung build. */
+function imagesUsedByRun(): string[] {
+  const images = new Set<string>([
+    "alpine:latest",
+    // The Node rows run in a slim image (they install their own toolchain); the lint rows share
+    // node:20-slim, and the Go linter rows use golangci's own image.
+    "node:20-slim",
+    "golangci/golangci-lint:latest",
+    // Java rows derive 17 or 21 from the repo's own build files; only these two tags exist.
+    "maven:3.9-eclipse-temurin-17-alpine",
+    "maven:3.9-eclipse-temurin-21-alpine",
+    // Generated Dockerfile bases (src/lib/fix-executor*, body/node/docker.ts). `scratch` and
+    // `gcr.io/distroless/static` are runtime stages: nothing to pull for the first and 2MB for
+    // the second, so neither is worth a line here.
+    "node:20",
+    "node:20-alpine",
+    "node:22",
+    "node:22-slim",
+    "python:3.12-alpine",
+    "golang:1.22-alpine",
+    "ruby:3.3-slim",
+    "rust:1.78-alpine",
+    "php:8.3-cli-alpine",
+    "eclipse-temurin:17-jdk-alpine",
+    "eclipse-temurin:17-jre-alpine",
+    "eclipse-temurin:21-jdk-alpine",
+    "eclipse-temurin:21-jre-alpine",
+    "debian:bookworm-slim",
+    "nginx:alpine",
+  ]);
+
+  for (const { image } of ALL_LANGUAGE_FIXTURES) images.add(image);
+
+  // .NET's tag is read from each fixture's own csproj (dotnetSdkVersion), so it is only knowable
+  // once the fixtures are cloned — which this cannot assume. Derive it when they are. Only the tag
+  // is interpolated, never the repository: the generated .NET Dockerfile's stages are `sdk` and
+  // `aspnet`, and a repository built from a variable is one nothing can classify (see the coverage
+  // check in src/lib/docker-audit-cache.test.ts).
+  for (const fixture of CSHARP_FIXTURES) {
+    const root = fixtureRoot(fixture);
+    if (!fs.existsSync(root)) continue;
+    const sdk = dotnetSdkVersion(readCsprojWithBuildProps(root, listFiles(root)));
+    if (!sdk) continue;
+    for (const tag of [sdk, `${sdk}-alpine`]) {
+      images.add(`mcr.microsoft.com/dotnet/sdk:${tag}`);
+      images.add(`mcr.microsoft.com/dotnet/aspnet:${tag}`);
+    }
+  }
+
+  return [...images];
+}
+
+/** Images this process has confirmed are local, whether it found them or pulled them. */
+const pulledImages = new Set<string>();
+
+/** `docker image inspect`, memoized — the reason a repeat run is near-instant.
+ *
+ * Without it every row would ask the registry about its tag before it could start; with it a warm
+ * run answers all of them from the local image store. */
+function imagePresent(image: string): boolean {
+  if (pulledImages.has(image)) return true;
+  const probe = run("docker", ["image", "inspect", image], { timeoutMs: 30_000 });
+  if (probe.ok) pulledImages.add(image);
+  return probe.ok;
+}
+
+/**
+ * Make sure a row's image is local before the row uses it.
+ *
+ * Memoized across rows, which is the point: twenty rows share `node:20-slim`, and a cold pull
+ * happening inside a row's timeout budget is indistinguishable from a hung build — that is how a
+ * first run used to lose rows to ETIMEDOUT rather than to a tool fault.
+ *
+ * A failed pull is not reported here. The row's own `docker create`/`docker build` then fails with
+ * the daemon's own message attached to that row, which is a far better place to read it.
+ */
+function ensureImage(image: string): void {
+  if (imagePresent(image)) return;
+  if (!PULL_ENABLED) return;
+  if (run("docker", ["pull", image], { timeoutMs: 20 * 60_000 }).ok) pulledImages.add(image);
+}
+
+/**
+ * Pull whatever is missing, in parallel, and report what changed.
+ *
+ * Never throws: an image that will not pull is reported by the row that needs it, with the daemon's
+ * own error attached, and the `auditors` row needs no Docker at all so failing here would take it
+ * down with the rows that do.
+ */
+async function warmImages(images: string[]): Promise<void> {
+  if (!WARM_ENABLED) return;
+  if (dockerProbe() !== null) return;
+
+  const missing = images.filter((image) => !imagePresent(image));
+  if (missing.length === 0) {
+    console.log(`[verify-fix-tools] all ${images.length} images already present`);
+    return;
+  }
+
+  // The opt-out is in the message on purpose: a filtered run (`-t`) has no use for the whole set,
+  // and this is the only moment at which that choice is still cheap.
+  console.log(
+    `[verify-fix-tools] pulling ${missing.length}/${images.length} images in parallel ` +
+      "(LR_AUDIT_WARM=0 to skip)…",
+  );
+  const started = Date.now();
+  const outcomes = await pullImagesInParallel(missing, (image) =>
+    runAsync("docker", ["pull", image], { timeoutMs: 20 * 60_000 }),
+  );
+  const failures = outcomes.filter((outcome) => !outcome.ok);
+  for (const outcome of outcomes) {
+    if (outcome.ok) pulledImages.add(outcome.image);
+  }
+  const seconds = Math.round((Date.now() - started) / 1000);
+  console.log(`[verify-fix-tools] ${outcomes.length - failures.length} pulled in ${seconds}s`);
+  if (failures.length > 0) {
+    console.warn(
+      `[verify-fix-tools] pull failures:\n  ${failures
+        .map((f) => `${f.image}: ${f.detail}`)
+        .join("\n  ")}`,
+    );
+  }
+}
+
+/** Drop the toolchain cache volumes. Only for LR_AUDIT_CACHE_RESET=1: a half-written download
+ * inside a volume survives the container that wrote it, and would poison every later run. */
+function resetCacheVolumes(): void {
+  for (const name of cacheVolumeNames()) {
+    run("docker", ["volume", "rm", name], { timeoutMs: 60_000 });
   }
 }
 
@@ -322,7 +574,13 @@ function runInContainer(
   mount = false,
 ): ExecResult {
   assertDockerAvailable();
+  ensureImage(image);
   const envArgs = Object.entries(env).flatMap(([k, v]) => ["-e", `${k}=${v}`]);
+  // Named volumes holding this language's download cache (npm/pip/go/cargo/m2/gradle/nuget/hex/
+  // composer/gems), so the container does not re-download a dependency tree it downloaded for an
+  // earlier row. Paths are relative to the image's own HOME/TOOLCHAIN layout; see
+  // src/lib/docker-audit-cache.ts for why each one is a subdirectory rather than a toolchain home.
+  const cacheArgs = CACHE_ENABLED ? cacheMountArgs([image]) : [];
   // Named so a timeout is recoverable. A container started by a `docker` CLI that spawnSync later
   // kills keeps running in the daemon; those orphans then compete for CPU with every later row, so
   // each timeout made the rest of the suite slower — observed as four alive at once, one for 49
@@ -342,6 +600,7 @@ function runInContainer(
         "-w",
         "/repo",
         ...envArgs,
+        ...cacheArgs,
         image,
         "sh",
         "-c",
@@ -355,7 +614,7 @@ function runInContainer(
 
   const created = run(
     "docker",
-    ["create", "--name", name, "-w", "/repo", ...envArgs, image, "sh", "-c", script],
+    ["create", "--name", name, "-w", "/repo", ...envArgs, ...cacheArgs, image, "sh", "-c", script],
     { timeoutMs: 5 * 60_000 },
   );
   if (!created.ok) return created;
@@ -595,7 +854,22 @@ function assertWorkflowRuns(
  */
 function assertDockerBuildsAndBoots(hostDir: string, tag: string, acceptableExitPattern?: RegExp) {
   assertDockerAvailable();
-  const build = run("docker", ["build", "-t", tag, "."], { cwd: hostDir, timeoutMs: 8 * 60_000 });
+  // The daemon's own layer cache is what makes a repeat build of the same generated Dockerfile
+  // fast — the Dockerfile is byte-identical and the context is unchanged, so the `npm ci` /
+  // `pip install` / `gradle build` layers hit. What silently destroys that is `docker builder
+  // prune`, a daemon reset, or a fresh CI VM, and the cost of finding out is another cold hour.
+  // Importing a durable copy makes it recoverable. Exporting is opt-in: `type=local` rewrites the
+  // whole cache after every build and there are twelve of them. See LR_AUDIT_BUILD_CACHE.
+  const cacheArgs = BUILD_CACHE_ACTIVE
+    ? buildCacheArgs(BUILD_CACHE_MODE, BUILD_CACHE_DIR, fs.existsSync(BUILD_CACHE_DIR))
+    : [];
+  if (cacheArgs.some((arg) => arg.startsWith("type=local,dest="))) {
+    fs.mkdirSync(BUILD_CACHE_DIR, { recursive: true });
+  }
+  const build = run("docker", buildCommandArgs(hasBuildx(), cacheArgs, tag, "."), {
+    cwd: hostDir,
+    timeoutMs: 8 * 60_000,
+  });
   if (!build.ok && acceptableExitPattern?.test(build.stdout + build.stderr)) return;
   expect(build.ok, `docker build failed:\n${build.stdout}\n${build.stderr}`.slice(-4000)).toBe(
     true,
@@ -749,6 +1023,76 @@ function copyFixture(f: Fixture, suffix: string): string {
   fs.cpSync(fixtureRoot(f), dest, { recursive: true, filter: (src) => !src.includes("/.git") });
   return dest;
 }
+
+// ─── Warm-up ────────────────────────────────────────────────────────────────────
+
+/** One line saying what this run gets to reuse.
+ *
+ * Printed even when nothing needed pulling, because here the difference between a warm run and a
+ * cold one is the difference between minutes and an hour — and an unexplained hour reads as a hung
+ * suite rather than a cold cache. */
+function reportCacheState(): void {
+  if (!CACHE_ENABLED) {
+    console.log("[verify-fix-tools] toolchain caches disabled (LR_AUDIT_CACHE)");
+    return;
+  }
+  const res = run("docker", ["system", "df", "-v", "--format", "json"], { timeoutMs: 120_000 });
+  if (!res.ok) return;
+  let raw: Array<{ Name?: string; Size?: string }> = [];
+  try {
+    raw = (JSON.parse(res.stdout) as { Volumes?: typeof raw }).Volumes ?? [];
+  } catch {
+    // A daemon without `--format json`; the pull report above is the useful half anyway.
+    return;
+  }
+  const { count, bytes } = summarizeCacheVolumes(
+    raw.map((v) => ({ name: String(v.Name ?? ""), size: String(v.Size ?? "0B") })),
+  );
+  console.log(
+    `[verify-fix-tools] toolchain caches: ${count} volume(s) holding ${formatBytes(bytes)}` +
+      ` — build layer cache: ${BUILD_CACHE_MODE}`,
+  );
+}
+
+/**
+ * Pull the image set once, in parallel, before any row starts.
+ *
+ * Never throws. A row that cannot get its image fails with the daemon's own error in that row's
+ * context, which is a better message than anything this hook could produce — and the `auditors`
+ * row needs no Docker at all, so failing here would take it down with the rows that do.
+ */
+beforeAll(async () => {
+  if (!WARM_ENABLED) return;
+  if (dockerProbe() !== null) {
+    console.log("[verify-fix-tools] Docker unavailable — skipping the image warm-up");
+    return;
+  }
+  // Every row needs a populated fixtures directory, and priming several gigabytes before failing
+  // on all of them would be an expensive way to learn that. The harness's own scratch directories
+  // are dot-prefixed (`.work-*`), so a real fixture is a non-dot directory.
+  const hasFixtures =
+    fs.existsSync(FIXTURES_ROOT) &&
+    fs
+      .readdirSync(FIXTURES_ROOT, { withFileTypes: true })
+      .some((entry) => entry.isDirectory() && !entry.name.startsWith("."));
+  if (!hasFixtures) {
+    console.log(
+      `[verify-fix-tools] no fixtures under ${FIXTURES_ROOT} — skipping the image warm-up ` +
+        "(populate with: bash scripts/clone-real-fixtures.sh)",
+    );
+    return;
+  }
+  try {
+    if (/^(1|true|yes)$/i.test(process.env.LR_AUDIT_CACHE_RESET ?? "")) {
+      console.log(`[verify-fix-tools] resetting ${cacheVolumeNames().length} toolchain volumes`);
+      resetCacheVolumes();
+    }
+    await warmImages(imagesUsedByRun());
+    reportCacheState();
+  } catch (err) {
+    console.warn(`[verify-fix-tools] warm-up failed: ${(err as Error).message}`);
+  }
+}, WARM_TIMEOUT_MS);
 
 // ─── Tests ──────────────────────────────────────────────────────────────────────
 
