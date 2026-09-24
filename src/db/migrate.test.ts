@@ -23,6 +23,7 @@ describe("SQLite migrations", () => {
     expect(tableNames(db)).not.toContain("credit_transactions");
     expect(tableNames(db)).not.toContain("processed_stripe_events");
     expect(tableNames(db)).not.toContain("github_credentials");
+    expect(tableNames(db)).not.toContain("marketing_articles");
   });
 
   it("removes commercial tables from an upgraded database", () => {
@@ -33,10 +34,15 @@ describe("SQLite migrations", () => {
       CREATE TABLE credit_transactions (id TEXT PRIMARY KEY);
       CREATE TABLE processed_stripe_events (event_id TEXT PRIMARY KEY);
       CREATE TABLE github_credentials (login TEXT PRIMARY KEY, sealed_token TEXT NOT NULL);
+      CREATE TABLE marketing_articles (id TEXT PRIMARY KEY, slug TEXT NOT NULL UNIQUE);
       INSERT INTO background_jobs (id, kind, payload)
       VALUES ('legacy-job', 'fix_run', '{"type":"fix_run","sealedGitHubToken":"secret","repoId":"r1"}');
       DELETE FROM schema_migrations
-      WHERE name IN ('002_remove_commercial_tables.sql', '004_remove_credential_vault.sql');
+      WHERE name IN (
+        '002_remove_commercial_tables.sql',
+        '004_remove_credential_vault.sql',
+        '005_remove_marketing_articles.sql'
+      );
     `);
 
     migrate(db);
@@ -45,6 +51,7 @@ describe("SQLite migrations", () => {
     expect(tableNames(db)).not.toContain("credit_transactions");
     expect(tableNames(db)).not.toContain("processed_stripe_events");
     expect(tableNames(db)).not.toContain("github_credentials");
+    expect(tableNames(db)).not.toContain("marketing_articles");
     expect(
       db.prepare("SELECT payload FROM background_jobs WHERE id = 'legacy-job'").pluck().get(),
     ).toBe('{"type":"fix_run","repoId":"r1"}');

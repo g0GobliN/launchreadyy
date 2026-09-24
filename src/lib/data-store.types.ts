@@ -232,42 +232,6 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["site_config"]["Insert"]>;
         Relationships: [];
       };
-      marketing_articles: {
-        Row: {
-          id: string;
-          slug: string;
-          section: string;
-          title: string;
-          date_label: string;
-          category: string | null;
-          author: string;
-          read_time: string | null;
-          image: string | null;
-          body: string;
-          sort_order: number;
-          published: boolean;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id: string;
-          slug: string;
-          section: string;
-          title: string;
-          date_label: string;
-          category?: string | null;
-          author?: string;
-          read_time?: string | null;
-          image?: string | null;
-          body: string;
-          sort_order?: number;
-          published?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["marketing_articles"]["Insert"]>;
-        Relationships: [];
-      };
       ai_usage: {
         Row: {
           id: number;
