@@ -51,22 +51,3 @@ export function ReadinessGauge({
     </div>
   );
 }
-
-export function verdictLabel(score: number): { title: string; subtitle: string } {
-  if (score >= 80) {
-    return {
-      title: "Launch Readyy",
-      subtitle: "This repository can likely be deployed safely.",
-    };
-  }
-  if (score >= 60) {
-    return {
-      title: "Almost Ready",
-      subtitle: "A few blockers remain before a confident production deploy.",
-    };
-  }
-  return {
-    title: "Not Ready",
-    subtitle: "Critical gaps block a safe production deploy.",
-  };
-}

@@ -14,7 +14,7 @@ import { DiffView } from "@/components/diff-view";
 import { FixPreviewInsightPanel } from "@/components/fix-preview-insight";
 import type { FixPreviewInsight } from "@/lib/fix-preview-insight.server";
 import { defaultFixBranchName } from "@/lib/fix-branch";
-import { buildFixRiskMap, DETERMINISTIC_AUDITOR_FIX_IDS, AI_FIX_IDS } from "@/lib/fix-meta";
+import { DETERMINISTIC_AUDITOR_FIX_IDS, AI_FIX_IDS } from "@/lib/fix-meta";
 import {
   FIX_PACKS,
   getAvailablePacks,
@@ -169,18 +169,6 @@ function FixPage() {
     [scanFixIds, packOpts],
   );
 
-  const scanRiskByFixId = useMemo(
-    () =>
-      buildFixRiskMap(
-        scan.issues.map((i) => ({
-          fixId: i.fixId,
-          riskLevel: i.riskLevel,
-          severity: i.severity,
-        })),
-      ),
-    [scan.issues],
-  );
-
   const fixDetail = useCallback(
     (id: string) => getFixPreviewDetails(id, repo.framework) ?? FIX_DETAILS[id],
     [repo.framework],
@@ -198,7 +186,7 @@ function FixPage() {
       f.deps.forEach((x) => deps.add(x));
     });
     return { added: [...added], changed: [...changed], deps: [...deps] };
-  }, [effectiveSelected, scanRiskByFixId, fixDetail]);
+  }, [effectiveSelected, fixDetail]);
 
   const fixPlan = useMemo(
     () =>
@@ -211,7 +199,7 @@ function FixPage() {
         effort: selected.length,
         language: packOpts.language,
       }),
-    [effectiveSelected, branchName, preview, packOpts.language],
+    [effectiveSelected, branchName, preview, selected.length, packOpts.language],
   );
 
   // Real diffs fetched from the server — debounced so rapid checkbox clicks don't spam
