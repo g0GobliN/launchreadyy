@@ -1,71 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { MotionConfig } from "framer-motion";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import {
-  HomeHero,
-  HomeTrust,
-  HomeFeatures,
-  HomeIntegrate,
-  HomeChecks,
-  HomeFrontier,
-  HomeChangelog,
-  HomeHighlights,
-  HomeCta,
-} from "@/components/marketing/home";
-import { getHomeFeedFn } from "@/lib/api/home-feed.functions";
-import { DEFAULT_HOME_FEED } from "@/lib/home-feed";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+/**
+ * `/` is the app, not a brochure.
+ *
+ * This route used to render a marketing homepage — hero, trust badges, feature grid, changelog
+ * feed. Anyone who reaches a self-hosted install has already installed it, so the page they want
+ * is the dashboard, which on a fresh install is exactly where the "set your GitHub token"
+ * onboarding lives. The marketing site is a separate deployment (`site/`), so nothing is lost by
+ * sending visitors straight through.
+ *
+ * A redirect rather than rendering the dashboard here on purpose: two URLs for the same screen
+ * would give it two canonical addresses for no benefit.
+ */
 export const Route = createFileRoute("/")({
-  loader: async () => {
-    try {
-      return await getHomeFeedFn();
-    } catch {
-      return DEFAULT_HOME_FEED;
-    }
+  beforeLoad: () => {
+    throw redirect({ to: "/dashboard" });
   },
-  head: () => ({
-    meta: [
-      { title: "LaunchReadyy — Know before you ship" },
-      {
-        name: "description",
-        content:
-          "Production readiness for any software repository — sandbox verify, evidence-backed findings, and one-click fix PRs.",
-      },
-      {
-        property: "og:title",
-        content: "LaunchReadyy — Know before you ship",
-      },
-      {
-        property: "og:description",
-        content:
-          "Sandbox-verified readiness and Production Security with one-click fix PRs. Know before you ship.",
-      },
-    ],
-  }),
-  component: Landing,
 });
-
-function Landing() {
-  const feed = Route.useLoaderData();
-
-  return (
-    <MotionConfig reducedMotion="user">
-      <div className="dark home-editorial min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-        <SiteHeader variant="editorial" />
-        <main>
-          <HomeHero />
-          <HomeTrust />
-          <HomeFeatures />
-          <HomeIntegrate />
-          <HomeChecks />
-          <HomeFrontier />
-          <HomeChangelog entries={feed.changelog} />
-          <HomeHighlights entries={feed.highlights} />
-          <HomeCta />
-        </main>
-        <SiteFooter />
-      </div>
-    </MotionConfig>
-  );
-}

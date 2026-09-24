@@ -21,7 +21,6 @@ import {
   Sparkles,
   TestTube2,
   Users,
-  Workflow,
   Zap,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -321,13 +320,6 @@ function DocsPage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Link
-                to="/workflow"
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-medium hover:bg-muted transition"
-              >
-                <Workflow className="h-3.5 w-3.5" />
-                How it works
-              </Link>
               <a
                 href={REPO_URL}
                 target="_blank"
@@ -361,14 +353,14 @@ function DocsPage() {
             <div className="mt-6 hidden rounded-xl border border-border bg-card p-4 text-xs text-muted-foreground lg:block">
               <p className="font-medium text-foreground">Also see</p>
               <div className="mt-2 space-y-1.5">
-                <Link to="/workflow" className="block text-primary hover:underline">
-                  How it works
+                <Link to="/changelog" className="block text-primary hover:underline">
+                  Changelog
                 </Link>
-                <Link to="/faq" className="block text-primary hover:underline">
-                  FAQ
+                <Link to="/security" className="block text-primary hover:underline">
+                  Security
                 </Link>
-                <Link to="/contact" className="block text-primary hover:underline">
-                  Contact
+                <Link to="/privacy" className="block text-primary hover:underline">
+                  Privacy
                 </Link>
               </div>
             </div>
@@ -391,18 +383,16 @@ function DocsPage() {
 
               <SubHeading>Where to find what</SubHeading>
               <div className="grid gap-3 sm:grid-cols-2">
-                <Link
-                  to="/workflow"
-                  className="group rounded-xl border border-border bg-card p-4 transition hover:border-primary/30 hover:bg-primary/5"
+                <a
+                  href="#troubleshooting"
+                  className="rounded-xl border border-border bg-card p-4 transition hover:border-primary/30 hover:bg-primary/5"
                 >
-                  <Workflow className="h-4 w-4 text-primary" />
-                  <p className="mt-2 font-medium text-foreground group-hover:text-primary">
-                    How it works
-                  </p>
+                  <AlertTriangle className="h-4 w-4 text-primary" />
+                  <p className="mt-2 font-medium text-foreground">Troubleshooting</p>
                   <p className="mt-1 text-xs leading-relaxed">
-                    Visual 5-step journey — connect, scan, select, PR, merge.
+                    Stuck scans, skipped sandbox runs, odd scores.
                   </p>
-                </Link>
+                </a>
                 <a
                   href="#capabilities"
                   className="rounded-xl border border-primary/30 bg-primary/5 p-4"
@@ -430,27 +420,24 @@ function DocsPage() {
             <Section
               id="getting-started"
               title="Getting started"
-              lead="Quick checklist beyond the visual walkthrough — see How it works for the full step-by-step."
+              lead="The whole loop — connect, scan, select fixes, review the diff, merge — all inside the app."
             >
               <div className="rounded-xl border border-border bg-card p-5">
-                <p className="font-medium text-foreground">Start with the 5-step journey</p>
+                <p className="font-medium text-foreground">Start with the 5-step loop</p>
                 <p className="mt-2 text-sm">
-                  The{" "}
-                  <Link to="/workflow" className="text-primary hover:underline">
-                    How it works
-                  </Link>{" "}
-                  page walks through connect → scan → select → PR → merge with timing estimates and
-                  a you vs LaunchReadyy breakdown. Read that first if you're new.
+                  Connect a repository, run a scan, pick the fixes you want, review the diff, then
+                  merge the pull request on GitHub. Sandbox runs and fix jobs each have their own
+                  page in the app, so you can follow the whole loop without leaving it.
                 </p>
                 <Link
-                  to="/workflow"
+                  to="/dashboard"
                   className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary hover:opacity-80"
                 >
-                  Open How it works <ArrowRight className="h-4 w-4" />
+                  Open the dashboard <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
 
-              <SubHeading>Checklist (details not on How it works)</SubHeading>
+              <SubHeading>Checklist</SubHeading>
               <BulletList
                 items={[
                   "Review findings — use Accept the risk where a check doesn't apply",
@@ -1233,11 +1220,8 @@ function DocsPage() {
               <div className="rounded-xl border border-primary/20 bg-primary/5 p-5 text-center">
                 <p className="font-medium text-foreground">Still stuck?</p>
                 <p className="mt-2 text-sm">
-                  <Link to="/faq" className="text-primary hover:underline">
-                    FAQ
-                  </Link>{" "}
-                  covers general and account questions. For errors, include repo name and what you
-                  expected.
+                  Open an issue with the repo name, the command that failed, and what you expected —
+                  that's normally enough to reproduce it.
                 </p>
                 <div className="mt-4 flex flex-wrap justify-center gap-3">
                   <a
@@ -1248,12 +1232,6 @@ function DocsPage() {
                   >
                     Open an issue <ArrowRight className="h-4 w-4" />
                   </a>
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium hover:bg-muted transition"
-                  >
-                    Contact us
-                  </Link>
                 </div>
               </div>
             </Section>
@@ -1431,11 +1409,11 @@ function DocsPage() {
               <SubHeading>Related pages</SubHeading>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { to: "/faq", label: "FAQ" },
-                  { to: "/workflow", label: "How it works" },
+                  { to: "/changelog", label: "Changelog" },
                   { to: "/security", label: "Security" },
                   { to: "/privacy", label: "Privacy" },
                   { to: "/terms", label: "Terms" },
+                  { to: "/license", label: "License" },
                 ].map((link) => (
                   <Link
                     key={link.to}

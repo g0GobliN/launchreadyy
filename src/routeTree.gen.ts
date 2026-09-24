@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WorkflowRouteImport } from './routes/workflow'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SecurityRouteImport } from './routes/security'
@@ -19,11 +18,8 @@ import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LicenseRouteImport } from './routes/license'
 import { Route as JobsRouteImport } from './routes/jobs'
-import { Route as FeaturesRouteImport } from './routes/features'
-import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RepoRepoIdRouteImport } from './routes/repo.$repoId'
@@ -41,11 +37,6 @@ import { Route as RepoRepoIdEnvRouteImport } from './routes/repo.$repoId.env'
 import { Route as RepoRepoIdBlockersRouteImport } from './routes/repo.$repoId.blockers'
 import { Route as RepoRepoIdJobJobIdRouteImport } from './routes/repo.$repoId.job.$jobId'
 
-const WorkflowRoute = WorkflowRouteImport.update({
-  id: '/workflow',
-  path: '/workflow',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -91,16 +82,6 @@ const JobsRoute = JobsRouteImport.update({
   path: '/jobs',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FeaturesRoute = FeaturesRouteImport.update({
-  id: '/features',
-  path: '/features',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DocsRoute = DocsRouteImport.update({
   id: '/docs',
   path: '/docs',
@@ -109,11 +90,6 @@ const DocsRoute = DocsRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChangelogRoute = ChangelogRouteImport.update({
@@ -200,11 +176,8 @@ const RepoRepoIdJobJobIdRoute = RepoRepoIdJobJobIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
-  '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/docs': typeof DocsRoute
-  '/faq': typeof FaqRoute
-  '/features': typeof FeaturesRoute
   '/jobs': typeof JobsRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
@@ -214,7 +187,6 @@ export interface FileRoutesByFullPath {
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/terms': typeof TermsRoute
-  '/workflow': typeof WorkflowRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/pr/$repoId': typeof PrRepoIdRoute
   '/r/$token': typeof RTokenRoute
@@ -233,11 +205,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
-  '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/docs': typeof DocsRoute
-  '/faq': typeof FaqRoute
-  '/features': typeof FeaturesRoute
   '/jobs': typeof JobsRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
@@ -247,7 +216,6 @@ export interface FileRoutesByTo {
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/terms': typeof TermsRoute
-  '/workflow': typeof WorkflowRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/pr/$repoId': typeof PrRepoIdRoute
   '/r/$token': typeof RTokenRoute
@@ -266,11 +234,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
-  '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/docs': typeof DocsRoute
-  '/faq': typeof FaqRoute
-  '/features': typeof FeaturesRoute
   '/jobs': typeof JobsRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
@@ -280,7 +245,6 @@ export interface FileRoutesById {
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/terms': typeof TermsRoute
-  '/workflow': typeof WorkflowRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/pr/$repoId': typeof PrRepoIdRoute
   '/r/$token': typeof RTokenRoute
@@ -301,11 +265,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/changelog'
-    | '/contact'
     | '/dashboard'
     | '/docs'
-    | '/faq'
-    | '/features'
     | '/jobs'
     | '/license'
     | '/privacy'
@@ -315,7 +276,6 @@ export interface FileRouteTypes {
     | '/security'
     | '/settings'
     | '/terms'
-    | '/workflow'
     | '/blog/$slug'
     | '/pr/$repoId'
     | '/r/$token'
@@ -334,11 +294,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/changelog'
-    | '/contact'
     | '/dashboard'
     | '/docs'
-    | '/faq'
-    | '/features'
     | '/jobs'
     | '/license'
     | '/privacy'
@@ -348,7 +305,6 @@ export interface FileRouteTypes {
     | '/security'
     | '/settings'
     | '/terms'
-    | '/workflow'
     | '/blog/$slug'
     | '/pr/$repoId'
     | '/r/$token'
@@ -366,11 +322,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/changelog'
-    | '/contact'
     | '/dashboard'
     | '/docs'
-    | '/faq'
-    | '/features'
     | '/jobs'
     | '/license'
     | '/privacy'
@@ -380,7 +333,6 @@ export interface FileRouteTypes {
     | '/security'
     | '/settings'
     | '/terms'
-    | '/workflow'
     | '/blog/$slug'
     | '/pr/$repoId'
     | '/r/$token'
@@ -400,11 +352,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChangelogRoute: typeof ChangelogRoute
-  ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   DocsRoute: typeof DocsRoute
-  FaqRoute: typeof FaqRoute
-  FeaturesRoute: typeof FeaturesRoute
   JobsRoute: typeof JobsRoute
   LicenseRoute: typeof LicenseRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -414,7 +363,6 @@ export interface RootRouteChildren {
   SecurityRoute: typeof SecurityRoute
   SettingsRoute: typeof SettingsRoute
   TermsRoute: typeof TermsRoute
-  WorkflowRoute: typeof WorkflowRoute
   BlogSlugRoute: typeof BlogSlugRoute
   PrRepoIdRoute: typeof PrRepoIdRoute
   RTokenRoute: typeof RTokenRoute
@@ -426,13 +374,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/workflow': {
-      id: '/workflow'
-      path: '/workflow'
-      fullPath: '/workflow'
-      preLoaderRoute: typeof WorkflowRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -496,20 +437,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JobsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/features': {
-      id: '/features'
-      path: '/features'
-      fullPath: '/features'
-      preLoaderRoute: typeof FeaturesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/docs': {
       id: '/docs'
       path: '/docs'
@@ -522,13 +449,6 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/changelog': {
@@ -673,11 +593,8 @@ const RepoRepoIdRouteWithChildren = RepoRepoIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChangelogRoute: ChangelogRoute,
-  ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   DocsRoute: DocsRoute,
-  FaqRoute: FaqRoute,
-  FeaturesRoute: FeaturesRoute,
   JobsRoute: JobsRoute,
   LicenseRoute: LicenseRoute,
   PrivacyRoute: PrivacyRoute,
@@ -687,7 +604,6 @@ const rootRouteChildren: RootRouteChildren = {
   SecurityRoute: SecurityRoute,
   SettingsRoute: SettingsRoute,
   TermsRoute: TermsRoute,
-  WorkflowRoute: WorkflowRoute,
   BlogSlugRoute: BlogSlugRoute,
   PrRepoIdRoute: PrRepoIdRoute,
   RTokenRoute: RTokenRoute,

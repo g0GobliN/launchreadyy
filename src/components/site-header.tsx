@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getSessionUserFn } from "@/lib/api/session.functions";
-import { Settings, Menu, X, LayoutGrid, BookOpen, Github, Compass, Activity } from "lucide-react";
+import { Settings, Menu, X, LayoutGrid, BookOpen, Github } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { BrandWordmark } from "@/components/brand-wordmark";
 import { useState, useEffect } from "react";
@@ -21,15 +21,15 @@ export function SiteHeader({ user: userProp, variant = "default" }: SiteHeaderPr
   });
   const user = userProp ?? sessionUser;
   const path = useRouterState({ select: (s) => s.location.pathname });
-  // Marketing pages (/docs, /faq, …) always keep the public nav — even when signed in.
+  // Reference pages (/docs, /changelog, /license, …) always keep the public nav — even when signed
+  // in.
   // App chrome only when authenticated on an in-app path (avoids "Loading…" / empty mobile menu for guests).
   const isApp =
     !!user &&
     (path.startsWith("/dashboard") ||
       path.startsWith("/repo") ||
       path.startsWith("/pr") ||
-      path.startsWith("/settings") ||
-      path.startsWith("/jobs"));
+      path.startsWith("/settings"));
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
@@ -59,8 +59,10 @@ export function SiteHeader({ user: userProp, variant = "default" }: SiteHeaderPr
         }
       >
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
+          {/* The wordmark goes to the app, not through `/` — that route is now a redirect to the
+              dashboard, and the logo is the most-clicked thing in the header. */}
           <Link
-            to="/"
+            to="/dashboard"
             className={
               isEditorial
                 ? "shrink-0 font-display text-[15px] font-semibold text-white sm:text-lg"
@@ -78,13 +80,6 @@ export function SiteHeader({ user: userProp, variant = "default" }: SiteHeaderPr
                   : "hidden items-center gap-7 text-sm text-muted-foreground md:flex"
               }
             >
-              <Link
-                to="/workflow"
-                className={isEditorial ? "hover:text-white" : "hover:text-foreground"}
-                activeProps={{ className: isEditorial ? "text-white" : "text-foreground" }}
-              >
-                Product
-              </Link>
               <Link
                 to="/changelog"
                 className={isEditorial ? "hover:text-white" : "hover:text-foreground"}
@@ -210,33 +205,23 @@ export function SiteHeader({ user: userProp, variant = "default" }: SiteHeaderPr
               </button>
             </div>
             <nav className="flex shrink-0 flex-col gap-1 px-3 py-3">
-              {[
-                {
-                  to: "/workflow",
-                  label: isEditorial ? "Product" : "How it works",
-                  icon: <LayoutGrid className="h-4 w-4" />,
-                },
-                { to: "/docs", label: "Docs", icon: <BookOpen className="h-4 w-4" /> },
-              ].map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  onClick={closeMobileMenu}
-                  className={
-                    isEditorial
-                      ? "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-white/55 transition hover:bg-white/5 hover:text-white"
-                      : "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground"
-                  }
-                  activeProps={{
-                    className: isEditorial
-                      ? "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white bg-white/10"
-                      : "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm bg-muted text-foreground font-medium",
-                  }}
-                >
-                  {item.icon}
-                  {item.label}
-                </Link>
-              ))}
+              <Link
+                to="/docs"
+                onClick={closeMobileMenu}
+                className={
+                  isEditorial
+                    ? "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-white/55 transition hover:bg-white/5 hover:text-white"
+                    : "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                }
+                activeProps={{
+                  className: isEditorial
+                    ? "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white bg-white/10"
+                    : "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm bg-muted text-foreground font-medium",
+                }}
+              >
+                <BookOpen className="h-4 w-4" />
+                Docs
+              </Link>
             </nav>
             <div
               className={`flex flex-1 flex-col justify-end px-4 pb-5 pt-6 ${
@@ -340,14 +325,6 @@ export function SiteHeader({ user: userProp, variant = "default" }: SiteHeaderPr
                 Resources
               </p>
               <nav className="flex flex-col gap-1">
-                <Link
-                  to="/workflow"
-                  onClick={closeMobileMenu}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition"
-                >
-                  <Compass className="h-4 w-4" />
-                  How it works
-                </Link>
                 <Link
                   to="/docs"
                   onClick={closeMobileMenu}
