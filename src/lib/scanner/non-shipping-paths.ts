@@ -80,10 +80,18 @@ export const NON_SHIPPING_GLOBS = [
   "*.spec.jsx",
 ];
 
-/** `*.test.ts` → `/\.test\.ts$/`. Only the leading-star form used above needs supporting. */
-const GLOB_MATCHERS = NON_SHIPPING_GLOBS.map(
-  (glob) => new RegExp(`${glob.replace(/^\*/, "").replace(/\./g, "\\.")}$`),
+/**
+ * The globs above split into a suffix list and a name set, then matched with string comparison.
+ *
+ * Not a RegExp built by interpolating the glob: that means escaping every regex metacharacter by
+ * hand, and escaping only `.` reads as safe right up until someone adds a glob containing `[`,
+ * `(`, or `+` — which is how this pattern was flagged as incomplete string escaping. `*.test.ts`
+ * becomes the suffix `.test.ts`; a glob with no leading `*` is matched on the whole file name.
+ */
+const NAME_SUFFIXES = NON_SHIPPING_GLOBS.filter((glob) => glob.startsWith("*")).map((glob) =>
+  glob.slice(1),
 );
+const EXACT_NAMES = new Set(NON_SHIPPING_GLOBS.filter((glob) => !glob.startsWith("*")));
 const DIR_SET = new Set(NOT_DEPLOYED_DIRS);
 
 /**
@@ -97,7 +105,7 @@ export function isNonShippingPath(path: string): boolean {
   const segments = path.split("/");
   if (segments.some((segment) => DIR_SET.has(segment))) return true;
   const name = segments[segments.length - 1] ?? path;
-  return GLOB_MATCHERS.some((re) => re.test(name));
+  return NAME_SUFFIXES.some((suffix) => name.endsWith(suffix)) || EXACT_NAMES.has(name);
 }
 
 /** The subset of a path→content map that actually ships. */
