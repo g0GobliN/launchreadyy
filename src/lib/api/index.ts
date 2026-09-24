@@ -24,7 +24,6 @@ export {
   getFixRequestFn,
   getFixPreviewFn,
   loadDashboardFn,
-  getAllJobsFn,
 } from "./github.functions";
 
 // Session (the local operator)

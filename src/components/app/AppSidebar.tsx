@@ -4,7 +4,6 @@ import {
   GitBranch,
   ScanSearch,
   FileText,
-  Wrench,
   Settings,
   User,
   Menu,
@@ -32,10 +31,7 @@ const SECTIONS = [
   },
   {
     title: "Ship",
-    items: [
-      { to: "/jobs", label: "Fixes", icon: Wrench },
-      { to: "/reports", label: "Reports", icon: FileText },
-    ],
+    items: [{ to: "/reports", label: "Reports", icon: FileText }],
   },
   {
     title: "Account",
@@ -47,7 +43,6 @@ const MOBILE_PRIMARY = [
   { to: "/dashboard", label: "Home", icon: LayoutDashboard, exact: true },
   { to: "/repos", label: "Repos", icon: GitBranch },
   { to: "/scans", label: "Scans", icon: ScanSearch },
-  { to: "/jobs", label: "Fixes", icon: Wrench },
 ] as const;
 
 export function AppSidebar({ user }: { user?: AppSidebarUser | null }) {
@@ -159,7 +154,7 @@ export function AppSidebar({ user }: { user?: AppSidebarUser | null }) {
       </aside>
 
       <nav className="app-glass fixed inset-x-0 bottom-0 z-40 border-t border-hairline pb-[env(safe-area-inset-bottom)] lg:hidden">
-        <div className="grid h-16 grid-cols-5 px-2">
+        <div className="grid h-16 grid-cols-4 px-2">
           {MOBILE_PRIMARY.map((item) => {
             const active = isActive(item.to, "exact" in item ? item.exact : false);
             const Icon = item.icon;

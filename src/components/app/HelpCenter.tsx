@@ -132,7 +132,7 @@ function helpForPath(path: string): HelpTopic {
       ],
       tips: [
         "Low-risk fixes apply as plain templates; medium+ risk uses your configured AI provider.",
-        "If a job fails, open it from Fixes / job history and retry or adjust selection.",
+        "If a job fails, reopen it from the repo's fix page and retry, or adjust the selection.",
       ],
     };
   }
@@ -252,18 +252,13 @@ function helpForPath(path: string): HelpTopic {
       ],
     };
   }
-  if (
-    path.startsWith("/repos") ||
-    path.startsWith("/scans") ||
-    path.startsWith("/jobs") ||
-    path.startsWith("/reports")
-  ) {
+  if (path.startsWith("/repos") || path.startsWith("/scans") || path.startsWith("/reports")) {
     return {
       title: "Workspace",
-      body: "Cross-repo lists: repositories you connected, past scans, Fix jobs, and launch reports.",
+      body: "Cross-repo lists: repositories you connected, past scans, and launch reports.",
       steps: [
         "Repositories — connect or open a repo to start sandbox → verdict.",
-        "Scans / Fixes / Reports — history and follow-ups without opening each repo first.",
+        "Scans / Reports — history and follow-ups without opening each repo first.",
       ],
     };
   }

@@ -388,31 +388,6 @@ export async function getRecentFixRequests(
   }));
 }
 
-export async function getAllFixRequests(
-  owner: string,
-): Promise<Array<FixRequest & { repoFullName: string }>> {
-  const { data: repos } = await supabase.from("repos").select("id").eq("owner", owner);
-  const repoIds = ((repos ?? []) as Array<{ id: string }>).map((r) => r.id);
-  if (repoIds.length === 0) return [];
-
-  // Bounded deliberately: this feeds a jobs list that is read newest-first, and an
-  // unbounded select of a table that only grows would eventually be truncated by
-  // PostgREST's own row cap anyway — better a limit we chose than one we didn't.
-  const { data, error } = await supabase
-    .from("fix_requests")
-    .select("*, repos(full_name)")
-    .in("repo_id", repoIds)
-    .order("created_at", { ascending: false })
-    .limit(200)
-    .returns<Array<FixRequestRow & { repos: { full_name: string } | null }>>();
-  if (error) throw new Error(error.message);
-
-  return (data ?? []).map((r) => ({
-    ...toFixRequest(r),
-    repoFullName: r.repos?.full_name ?? "unknown",
-  }));
-}
-
 export async function getRecentScans(owner?: string): Promise<
   Array<{
     repo: string;

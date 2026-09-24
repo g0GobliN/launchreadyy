@@ -17,7 +17,6 @@ import { Route as ReposRouteImport } from './routes/repos'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LicenseRouteImport } from './routes/license'
-import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ChangelogRouteImport } from './routes/changelog'
@@ -25,7 +24,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RepoRepoIdRouteImport } from './routes/repo.$repoId'
 import { Route as RTokenRouteImport } from './routes/r.$token'
 import { Route as PrRepoIdRouteImport } from './routes/pr.$repoId'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as RepoRepoIdIndexRouteImport } from './routes/repo.$repoId.index'
 import { Route as RepoRepoIdReportRouteImport } from './routes/repo.$repoId_.report'
 import { Route as RepoRepoIdLiveSecurityRouteImport } from './routes/repo.$repoId_.live-security'
@@ -77,11 +75,6 @@ const LicenseRoute = LicenseRouteImport.update({
   path: '/license',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JobsRoute = JobsRouteImport.update({
-  id: '/jobs',
-  path: '/jobs',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DocsRoute = DocsRouteImport.update({
   id: '/docs',
   path: '/docs',
@@ -115,11 +108,6 @@ const RTokenRoute = RTokenRouteImport.update({
 const PrRepoIdRoute = PrRepoIdRouteImport.update({
   id: '/pr/$repoId',
   path: '/pr/$repoId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/blog/$slug',
-  path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RepoRepoIdIndexRoute = RepoRepoIdIndexRouteImport.update({
@@ -178,7 +166,6 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/dashboard': typeof DashboardRoute
   '/docs': typeof DocsRoute
-  '/jobs': typeof JobsRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
   '/reports': typeof ReportsRoute
@@ -187,7 +174,6 @@ export interface FileRoutesByFullPath {
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/terms': typeof TermsRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/pr/$repoId': typeof PrRepoIdRoute
   '/r/$token': typeof RTokenRoute
   '/repo/$repoId': typeof RepoRepoIdRouteWithChildren
@@ -207,7 +193,6 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/dashboard': typeof DashboardRoute
   '/docs': typeof DocsRoute
-  '/jobs': typeof JobsRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
   '/reports': typeof ReportsRoute
@@ -216,7 +201,6 @@ export interface FileRoutesByTo {
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/terms': typeof TermsRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/pr/$repoId': typeof PrRepoIdRoute
   '/r/$token': typeof RTokenRoute
   '/repo/$repoId/blockers': typeof RepoRepoIdBlockersRoute
@@ -236,7 +220,6 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/dashboard': typeof DashboardRoute
   '/docs': typeof DocsRoute
-  '/jobs': typeof JobsRoute
   '/license': typeof LicenseRoute
   '/privacy': typeof PrivacyRoute
   '/reports': typeof ReportsRoute
@@ -245,7 +228,6 @@ export interface FileRoutesById {
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/terms': typeof TermsRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/pr/$repoId': typeof PrRepoIdRoute
   '/r/$token': typeof RTokenRoute
   '/repo/$repoId': typeof RepoRepoIdRouteWithChildren
@@ -267,7 +249,6 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/dashboard'
     | '/docs'
-    | '/jobs'
     | '/license'
     | '/privacy'
     | '/reports'
@@ -276,7 +257,6 @@ export interface FileRouteTypes {
     | '/security'
     | '/settings'
     | '/terms'
-    | '/blog/$slug'
     | '/pr/$repoId'
     | '/r/$token'
     | '/repo/$repoId'
@@ -296,7 +276,6 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/dashboard'
     | '/docs'
-    | '/jobs'
     | '/license'
     | '/privacy'
     | '/reports'
@@ -305,7 +284,6 @@ export interface FileRouteTypes {
     | '/security'
     | '/settings'
     | '/terms'
-    | '/blog/$slug'
     | '/pr/$repoId'
     | '/r/$token'
     | '/repo/$repoId/blockers'
@@ -324,7 +302,6 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/dashboard'
     | '/docs'
-    | '/jobs'
     | '/license'
     | '/privacy'
     | '/reports'
@@ -333,7 +310,6 @@ export interface FileRouteTypes {
     | '/security'
     | '/settings'
     | '/terms'
-    | '/blog/$slug'
     | '/pr/$repoId'
     | '/r/$token'
     | '/repo/$repoId'
@@ -354,7 +330,6 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   DashboardRoute: typeof DashboardRoute
   DocsRoute: typeof DocsRoute
-  JobsRoute: typeof JobsRoute
   LicenseRoute: typeof LicenseRoute
   PrivacyRoute: typeof PrivacyRoute
   ReportsRoute: typeof ReportsRoute
@@ -363,7 +338,6 @@ export interface RootRouteChildren {
   SecurityRoute: typeof SecurityRoute
   SettingsRoute: typeof SettingsRoute
   TermsRoute: typeof TermsRoute
-  BlogSlugRoute: typeof BlogSlugRoute
   PrRepoIdRoute: typeof PrRepoIdRoute
   RTokenRoute: typeof RTokenRoute
   RepoRepoIdRoute: typeof RepoRepoIdRouteWithChildren
@@ -430,13 +404,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LicenseRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/jobs': {
-      id: '/jobs'
-      path: '/jobs'
-      fullPath: '/jobs'
-      preLoaderRoute: typeof JobsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/docs': {
       id: '/docs'
       path: '/docs'
@@ -484,13 +451,6 @@ declare module '@tanstack/react-router' {
       path: '/pr/$repoId'
       fullPath: '/pr/$repoId'
       preLoaderRoute: typeof PrRepoIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/blog/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/repo/$repoId/': {
@@ -595,7 +555,6 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   DashboardRoute: DashboardRoute,
   DocsRoute: DocsRoute,
-  JobsRoute: JobsRoute,
   LicenseRoute: LicenseRoute,
   PrivacyRoute: PrivacyRoute,
   ReportsRoute: ReportsRoute,
@@ -604,7 +563,6 @@ const rootRouteChildren: RootRouteChildren = {
   SecurityRoute: SecurityRoute,
   SettingsRoute: SettingsRoute,
   TermsRoute: TermsRoute,
-  BlogSlugRoute: BlogSlugRoute,
   PrRepoIdRoute: PrRepoIdRoute,
   RTokenRoute: RTokenRoute,
   RepoRepoIdRoute: RepoRepoIdRouteWithChildren,

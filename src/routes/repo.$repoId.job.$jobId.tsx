@@ -58,7 +58,6 @@ type FixRequestRow = Database["public"]["Tables"]["fix_requests"]["Row"];
 
 export const Route = createFileRoute("/repo/$repoId/job/$jobId")({
   head: () => ({ meta: [{ title: "Launch analysis job — LaunchReadyy" }] }),
-  validateSearch: (s: Record<string, unknown>) => ({ from: (s.from as string) ?? "" }),
   component: JobPage,
   notFoundComponent: () => <RepoNotFound reason="job" />,
   errorComponent: ({ error }) => <AuthErrorScreen error={error} />,
@@ -79,7 +78,6 @@ export const Route = createFileRoute("/repo/$repoId/job/$jobId")({
 function JobPage() {
   const { repo, job: initialJob, scan } = Route.useLoaderData();
   const { jobId } = Route.useParams();
-  const { from } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [job, setJob] = useState<FixRequestRow>(initialJob);
   const [cancelling, setCancelling] = useState(false);
@@ -137,22 +135,13 @@ function JobPage() {
           job.status === "awaiting_review" || job.status === "pr_open" ? "max-w-7xl" : "max-w-3xl"
         }`}
       >
-        {from === "jobs" ? (
-          <Link
-            to="/jobs"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" /> Back to job history
-          </Link>
-        ) : (
-          <Link
-            to="/repo/$repoId"
-            params={{ repoId: repo.id }}
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" /> Back to analysis
-          </Link>
-        )}
+        <Link
+          to="/repo/$repoId"
+          params={{ repoId: repo.id }}
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" /> Back to analysis
+        </Link>
 
         <DashboardPageHeader
           eyebrow="Fix · Pull request"

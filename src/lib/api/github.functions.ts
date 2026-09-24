@@ -575,14 +575,6 @@ export const loadDashboardFn = createServerFn({ method: "GET" }).handler(async (
   return loadDashboardData();
 });
 
-export const getAllJobsFn = createServerFn({ method: "GET" }).handler(async () => {
-  const { getLocalUser } = await import("../github-token.server");
-  const user = getLocalUser();
-  if (!user) throw new Error("Not authenticated");
-  const { getAllFixRequests } = await import("../db.server");
-  return getAllFixRequests(user.login);
-});
-
 // ─── Architecture analysis ────────────────────────────────────────────────────
 
 // Returns existing arch scan for a repo, or null if none exists.
