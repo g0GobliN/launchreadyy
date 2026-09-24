@@ -9,6 +9,7 @@
  *   npm run build && npm run test:production-start
  */
 import { spawn } from "node:child_process";
+import { randomBytes } from "node:crypto";
 import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -17,12 +18,16 @@ const ROOT = resolve(import.meta.dirname, "..");
 const SERVER_ENTRY = join(ROOT, "dist", "server", "server.js");
 const BOOT_TIMEOUT_MS = 15_000;
 
+/**
+ * 32 bytes of CSPRNG output, hex-encoded — the shape `openssl rand -hex 32` produces.
+ *
+ * These feed SESSION_SECRET and ENV_VAR_ENCRYPTION_SECRET, so they have to be unpredictable:
+ * `Math.random()` is seeded and observable, and this file is scanned by the same rules the product
+ * ships (`Math.random() used for a token/id`). A throwaway smoke-test secret is still a secret the
+ * server will happily encrypt data with.
+ */
 function randomHex(bytes: number): string {
-  return Array.from({ length: bytes }, () =>
-    Math.floor(Math.random() * 256)
-      .toString(16)
-      .padStart(2, "0"),
-  ).join("");
+  return randomBytes(bytes).toString("hex");
 }
 
 async function main() {
@@ -47,7 +52,8 @@ async function main() {
           SESSION_SECRET: randomHex(32),
           ENV_VAR_ENCRYPTION_SECRET: randomHex(32),
           // Deliberately no GITHUB_TOKEN / AI_PROVIDER / E2B_API_KEY — a fresh install has none
-          // of those, and the server must still boot and serve the marketing homepage.
+          // of those, and the server must still boot and answer a request without them. `/`
+          // redirects to the dashboard, whose whole job in that state is to ask for the token.
           GITHUB_TOKEN: "",
         },
         stdio: ["ignore", "pipe", "pipe"],
