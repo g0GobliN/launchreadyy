@@ -1,68 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  ArrowLeft,
-  Gauge,
-  TestTube2,
-  KeyRound,
-  Wrench,
-  AlertTriangle,
-  FileText,
-  Layers,
-  ShieldCheck,
-  Clock,
-  Menu,
-  X,
-} from "lucide-react";
+import { ArrowLeft, Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { AppSidebarUser } from "./AppSidebar";
 import { BrandMark } from "./BrandMark";
 import { SidebarUserFooter } from "./SidebarUserFooter";
-
-type RepoNavItem = {
-  to: string;
-  label: string;
-  icon: typeof Gauge;
-  exact?: boolean;
-};
-
-type RepoNavSection = {
-  title: string;
-  items: RepoNavItem[];
-};
-
-/** grouped nav — sandbox-first journey. */
-export const REPO_NAV_SECTIONS: RepoNavSection[] = [
-  {
-    title: "Verify",
-    items: [
-      { to: "/repo/$repoId/sandbox", label: "Sandbox build", icon: TestTube2 },
-      { to: "/repo/$repoId/runs", label: "Run history", icon: Clock },
-      { to: "/repo/$repoId/env", label: "Build & environment", icon: KeyRound },
-    ],
-  },
-  {
-    title: "Verdict",
-    items: [
-      { to: "/repo/$repoId", label: "Production verdict", icon: Gauge, exact: true },
-      { to: "/repo/$repoId/arch", label: "Architecture", icon: Layers },
-      { to: "/repo/$repoId/live-security", label: "Live security", icon: ShieldCheck },
-    ],
-  },
-  {
-    title: "Fix",
-    items: [
-      { to: "/repo/$repoId/fix", label: "Fix PR", icon: Wrench },
-      { to: "/repo/$repoId/blockers", label: "Blockers", icon: AlertTriangle },
-    ],
-  },
-  {
-    title: "Deliver",
-    items: [{ to: "/repo/$repoId/report", label: "Launch report", icon: FileText }],
-  },
-];
-
-export const REPO_TABS = REPO_NAV_SECTIONS.flatMap((s) => s.items);
+import { REPO_NAV_SECTIONS } from "./repo-nav";
 
 function itemActive(path: string, href: string, exact?: boolean) {
   if (exact) return path === href;

@@ -1,20 +1,7 @@
 import { Box, CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CompletedStep, PlannedStep } from "@/hooks/useSandboxStream";
-import { STEP_LABEL } from "@/hooks/useSandboxStream";
-
-export type StepChipStatus = "pending" | "running" | "done" | "failed";
-
-export function stepChipStatus(
-  step: string,
-  currentStep: string | null,
-  completedSteps: CompletedStep[],
-): StepChipStatus {
-  const completed = completedSteps.find((c) => c.step === step);
-  if (completed) return completed.exitCode === 0 ? "done" : "failed";
-  if (currentStep === step) return "running";
-  return "pending";
-}
+import { STEP_LABEL, stepChipStatus, type StepChipStatus } from "@/hooks/useSandboxStream";
 
 function chipClass(st: StepChipStatus, variant: "terminal" | "surface") {
   if (variant === "terminal") {

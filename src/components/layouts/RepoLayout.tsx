@@ -2,11 +2,10 @@ import type { ReactNode } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import type { AppSidebarUser } from "@/components/app/AppSidebar";
 import { HelpMain, HelpProvider } from "@/components/app/HelpCenter";
-import { RepoSidebar, REPO_TABS } from "@/components/app/RepoSidebar";
+import { RepoSidebar } from "@/components/app/RepoSidebar";
+import { REPO_TABS } from "@/components/app/repo-nav";
 import { ProductTopbar } from "@/components/app/ProductTopbar";
 import { DashboardThemeBoundary } from "@/components/app/DashboardThemeBoundary";
-
-export { REPO_TABS };
 
 /**
  * Full available width, matching AppLayout so the content edge doesn't shift between tabs.

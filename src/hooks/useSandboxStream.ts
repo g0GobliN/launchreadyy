@@ -207,3 +207,21 @@ export const STEP_LABEL: Record<string, string> = {
   test: "Test",
   security: "Security",
 };
+
+export type StepChipStatus = "pending" | "running" | "done" | "failed";
+
+/**
+ * Where a single pipeline step currently stands. Exported from the stream hook — the only
+ * module that owns step state — so SandboxStepChips and TerminalWindow can both derive
+ * chip status without the chip module exporting a non-component alongside its components.
+ */
+export function stepChipStatus(
+  step: string,
+  currentStep: string | null,
+  completedSteps: CompletedStep[],
+): StepChipStatus {
+  const completed = completedSteps.find((c) => c.step === step);
+  if (completed) return completed.exitCode === 0 ? "done" : "failed";
+  if (currentStep === step) return "running";
+  return "pending";
+}

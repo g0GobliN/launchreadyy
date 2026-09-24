@@ -28,7 +28,9 @@ function useHelp() {
   return ctx;
 }
 
-export function useHelpOpen() {
+// Module-private on purpose: exporting a non-component alongside the components above defeats
+// Fast Refresh, and nothing outside this file needs the flag.
+function useHelpOpen() {
   return useHelp().open;
 }
 

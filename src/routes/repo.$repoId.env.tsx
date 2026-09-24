@@ -15,12 +15,8 @@ import {
   upsertRepoEnvVarFn,
   upsertRepoEnvVarsBulkFn,
 } from "@/lib/api/sandbox.functions";
-import {
-  BuildSettingsCard,
-  BuildSettingsInline,
-  useBuildSettingsForm,
-  type BuildData,
-} from "@/components/app/BuildSettingsCard";
+import { BuildSettingsCard, BuildSettingsInline } from "@/components/app/BuildSettingsCard";
+import { useBuildSettingsForm, type BuildData } from "@/hooks/useBuildSettingsForm";
 import { triggerScan } from "@/lib/api/github.functions";
 import { getSessionUserFn } from "@/lib/api/session.functions";
 import { useMemo, useState } from "react";

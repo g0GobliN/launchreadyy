@@ -1,66 +1,13 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { ChevronRight, Loader2, Save, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { saveRepoBuildSettingsFn, type getRepoBuildSettingsFn } from "@/lib/api/sandbox.functions";
+import {
+  useBuildSettingsForm,
+  type BuildData,
+  type BuildSettingsForm,
+} from "@/hooks/useBuildSettingsForm";
 
-export type BuildData = Awaited<ReturnType<typeof getRepoBuildSettingsFn>>;
-
-export type BuildSettingsForm = ReturnType<typeof useBuildSettingsForm>;
-
-/**
- * Form state lives in a hook so the launch flow can save these values as part of
- * "Start sandbox" — typing a root directory and then launching has to apply it,
- * not silently run the old configuration because a separate Save was never clicked.
- */
-export function useBuildSettingsForm(initial: BuildData) {
-  const [rootDir, setRootDir] = useState(initial.settings.rootDir ?? "");
-  const [buildCommand, setBuildCommand] = useState(initial.settings.buildCommand ?? "");
-  const [nodeVersion, setNodeVersion] = useState(initial.settings.nodeVersion ?? "");
-  const [includeTest, setIncludeTest] = useState(initial.settings.includeTest);
-
-  const changed =
-    rootDir.trim() !== (initial.settings.rootDir ?? "") ||
-    buildCommand.trim() !== (initial.settings.buildCommand ?? "") ||
-    nodeVersion.trim() !== (initial.settings.nodeVersion ?? "") ||
-    includeTest !== initial.settings.includeTest;
-
-  const save = useCallback(
-    async (repoId: string) => {
-      await saveRepoBuildSettingsFn({
-        data: {
-          repoId,
-          rootDir: rootDir.trim() || null,
-          buildCommand: buildCommand.trim() || null,
-          nodeVersion: nodeVersion.trim() || null,
-          includeTest,
-        },
-      });
-    },
-    [rootDir, buildCommand, nodeVersion, includeTest],
-  );
-
-  /** No-op when nothing was touched — keeps the launch path off a needless write. */
-  const saveIfChanged = useCallback(
-    async (repoId: string) => {
-      if (changed) await save(repoId);
-    },
-    [changed, save],
-  );
-
-  return {
-    rootDir,
-    setRootDir,
-    buildCommand,
-    setBuildCommand,
-    nodeVersion,
-    setNodeVersion,
-    includeTest,
-    setIncludeTest,
-    changed,
-    save,
-    saveIfChanged,
-  };
-}
+export type { BuildData, BuildSettingsForm } from "@/hooks/useBuildSettingsForm";
 
 const fieldClass =
   "h-10 w-full rounded-xl border border-input bg-background px-3 font-mono text-sm outline-none focus:border-data focus:ring-2 focus:ring-data/20";

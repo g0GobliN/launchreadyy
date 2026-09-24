@@ -3,8 +3,8 @@ import { CheckCircle2, Loader2, XCircle, AlertTriangle, Info } from "lucide-reac
 import { cn } from "@/lib/utils";
 import type { LogLine } from "@/lib/sandbox-log-lines";
 import type { CompletedStep, PlannedStep } from "@/hooks/useSandboxStream";
-import { STEP_LABEL } from "@/hooks/useSandboxStream";
-import { SandboxStepChips, stepChipStatus } from "@/components/app/SandboxStepChips";
+import { STEP_LABEL, stepChipStatus } from "@/hooks/useSandboxStream";
+import { SandboxStepChips } from "@/components/app/SandboxStepChips";
 
 export type TerminalWindowProps = {
   logs: LogLine[];
