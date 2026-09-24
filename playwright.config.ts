@@ -14,7 +14,7 @@ export default defineConfig({
   webServer: useRemoteBase
     ? undefined
     : {
-        command: "npm run dev:vite",
+        command: "npm run dev",
         url: "http://127.0.0.1:5174",
         reuseExistingServer: true,
         timeout: 120_000,
