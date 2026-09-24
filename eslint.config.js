@@ -54,5 +54,20 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
+  // TanStack Start file-based routing requires every route module to export `Route` — an
+  // object, never a component — and keeps the route's UI as module-local functions referenced
+  // via `component: Foo`. That combination trips this rule's `localComponents` branch on all 32
+  // route files on every run, and there is no edit that clears it while satisfying the router:
+  // exporting the components too would not make `Route` a component, so Fast Refresh's verdict
+  // on the module is unchanged either way. The warning is therefore pure noise here, and noise
+  // at this volume hides the real findings the rule does catch in `src/components/**`.
+  //
+  // Off for `src/routes/**` only — every other directory keeps the rule at full strength.
+  {
+    files: ["src/routes/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
   eslintPluginPrettier,
 );

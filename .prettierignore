@@ -7,3 +7,19 @@ package-lock.json
 bun.lock
 routeTree.gen.ts
 rust/crates/indexer/pkg
+
+# Dotenv files: prettier has no parser for the format, so including them makes
+# `npm run format` fail rather than format anything.
+.env
+.env.*
+
+# Hand-formatted prose and inputs. `prettier --write .` over these rewrapped every docs table and
+# every README paragraph and expanded the deliberately one-line fixture package.json files, so the
+# formatting command produced a large diff unrelated to whatever change was in hand. Nothing gates
+# markdown formatting — CI runs typecheck, lint, and the test suite — so these stay as written and
+# `npm run format` is scoped to code, which is what the tooling actually agrees on.
+docs
+fixtures
+scan-baseline.json
+launchreadyy/README.md
+rust/README.md
