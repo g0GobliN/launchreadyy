@@ -25,7 +25,15 @@ function LicensePage() {
         <a href={`${REPO_URL}/blob/main/LICENSE`} className="underline underline-offset-2">
           LICENSE
         </a>{" "}
-        file in the repository.
+        file in the repository. Attribution and trademark notices live in the{" "}
+        <a href={`${REPO_URL}/blob/main/NOTICE`} className="underline underline-offset-2">
+          NOTICE
+        </a>{" "}
+        and{" "}
+        <a href={`${REPO_URL}/blob/main/TRADEMARKS.md`} className="underline underline-offset-2">
+          TRADEMARKS.md
+        </a>{" "}
+        files.
       </p>
 
       <Section title="What you can do">
@@ -45,6 +53,11 @@ function LicensePage() {
           <li>Retain applicable copyright, patent, trademark, and attribution notices.</li>
           <li>Don't present a fork as the official LaunchReadyy project (see TRADEMARKS.md).</li>
         </ul>
+        <p>
+          The license does not restrict who may run the software, including as a hosted service. It
+          also grants no rights to the LaunchReadyy name or logos — see TRADEMARKS.md for what those
+          cover.
+        </p>
       </Section>
 
       <Section title="Questions">

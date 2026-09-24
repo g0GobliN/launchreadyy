@@ -9,10 +9,16 @@ PRs that introduce multi-user account or product-tier concepts will not be merge
 
 ## Ground rules
 
-- **Apache-2.0** for all contributions, same as the project.
+- **Apache-2.0** for all contributions, same as the project — inbound equals outbound. There is no
+  CLA: submitting a pull request licenses your contribution under Apache-2.0, and the core stays
+  Apache-2.0. Brand use is governed separately by [TRADEMARKS.md](TRADEMARKS.md), not by the code
+  license.
 - Keep changes focused. One logical change per PR beats a drive-by refactor.
 - `npm run typecheck`, `npm run lint`, and `npm run test` must pass. CI enforces this —
   don't open a PR that reds the pipeline. (Both assume the wasm artifact exists; see below.)
+- Commands that need something installed check first and tell you what is missing rather than
+  failing inside a dependency. The full list, with prerequisites, is
+  [appendix A](docs/reference/appendix-a-scripts.md).
 - Match the tone of the surrounding code. Comments explain _why_, not _what_; many
   comments document a specific regression that a clean-looking edit could reintroduce.
   Read them before "simplifying" the thing they annotate.
@@ -25,6 +31,10 @@ cp .env.example .env   # your own keys; see README Quick start
 npm run build          # first run compiles the wasm indexer (needs Rust + wasm-pack)
 npm run dev
 ```
+
+**Node 22 is required** (`.nvmrc`; `engines` needs `^20.19` or `>=22.13`). `npm install` refuses to
+run on anything older, because installing on Node 18 otherwise succeeds and then `npm run dev`
+dies with `crypto.hash is not a function` from inside Vite.
 
 **Rust and `wasm-pack` are required for a full local setup.** The readiness indexer is a Rust
 crate compiled to WebAssembly, and its build output is git-ignored, so a fresh clone cannot even

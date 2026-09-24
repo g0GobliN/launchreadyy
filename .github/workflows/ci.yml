@@ -41,6 +41,13 @@ jobs:
         with:
           node-version: "22"
 
+      # Licensing identity: LICENSE/NOTICE/TRADEMARKS.md present and intact, and every manifest
+      # still declaring Apache-2.0. Needs only Node and the checkout, so it sits above the Rust
+      # setup and `npm ci` to fail the pipeline in seconds rather than after a full build. A
+      # license is the one file a well-meaning PR can swap with nothing else noticing.
+      - name: Licensing artifacts in sync
+        run: npm run verify:licensing
+
       # `npm run build` → ensure-wasm → wasm:build needs rustc + wasm-pack (pkg/ is gitignored).
       - name: Install Rust
         run: |

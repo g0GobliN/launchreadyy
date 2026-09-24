@@ -34,8 +34,8 @@ stays in the local SQLite database.
 
 ## Screenshots
 
-| Readiness analysis | Verified remediation |
-| ------------------ | -------------------- |
+| Readiness analysis                                              | Verified remediation                                               |
+| --------------------------------------------------------------- | ------------------------------------------------------------------ |
 | ![LaunchReadyy readiness score](public/marketing/gen-score.jpg) | ![LaunchReadyy pull request workflow](public/marketing/gen-pr.jpg) |
 
 ## Requirements
@@ -70,14 +70,14 @@ npm run dev
 
 Copy [`.env.example`](.env.example) to `.env`, or use `launchreadyy setup`.
 
-| Setting | Purpose | Required |
-| ------- | ------- | -------- |
-| `GITHUB_TOKEN` | Reads repositories and creates branches and pull requests | For repository operations |
-| `SESSION_SECRET` | Signs the installation's local session | Yes |
-| `ENV_VAR_ENCRYPTION_SECRET` | Encrypts sandbox environment variables at rest | When saving project variables |
-| `E2B_API_KEY` | Runs isolated install/build/lint/test verification | No |
-| `AI_PROVIDER` and provider key | Generates fixes, tests, and explanations | No |
-| `APP_URL`, `HOST`, `PORT` | Controls the installation URL and server binding | No |
+| Setting                        | Purpose                                                   | Required                      |
+| ------------------------------ | --------------------------------------------------------- | ----------------------------- |
+| `GITHUB_TOKEN`                 | Reads repositories and creates branches and pull requests | For repository operations     |
+| `SESSION_SECRET`               | Signs the installation's local session                    | Yes                           |
+| `ENV_VAR_ENCRYPTION_SECRET`    | Encrypts sandbox environment variables at rest            | When saving project variables |
+| `E2B_API_KEY`                  | Runs isolated install/build/lint/test verification        | No                            |
+| `AI_PROVIDER` and provider key | Generates fixes, tests, and explanations                  | No                            |
+| `APP_URL`, `HOST`, `PORT`      | Controls the installation URL and server binding          | No                            |
 
 Without E2B, verification is reported as skipped. Without an AI provider, deterministic scanning,
 scoring, and template fixes continue to work.
@@ -129,5 +129,14 @@ npm test
 
 ## License
 
-LaunchReadyy Community is licensed under Apache-2.0. See [LICENSE](LICENSE) and
-[TRADEMARKS.md](TRADEMARKS.md).
+LaunchReadyy Community is open source under **Apache-2.0** — self-host it, modify it, and use it
+commercially. See [LICENSE](LICENSE), [NOTICE](NOTICE), and [TRADEMARKS.md](TRADEMARKS.md).
+
+The license covers the code and documentation in this repository, including the scanner engine,
+CLI, self-hosted UI, and provider adapters. It does not cover the LaunchReadyy name or logos, which
+identify the official project only. Apache-2.0 is used rather than MIT for its explicit patent grant
+and patent-termination clause; small standalone SDKs or libraries may be published separately under
+MIT where maximum adoption matters.
+
+Neither license restricts who may run the software, including as a hosted service. Trademark use is
+the only thing this repository limits — see [TRADEMARKS.md](TRADEMARKS.md).
