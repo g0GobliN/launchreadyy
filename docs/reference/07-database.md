@@ -4,6 +4,10 @@ Single source: [`src/db/migrations/`](../../src/db/migrations/), applied automat
 (`ensureSchema()` in `src/db/schema.ts`) — no manual step, no external database to provision.
 Local SQLite file at `data/launchreadyy.db` (WAL mode, foreign keys on).
 
+Retiring a feature means retiring its table too: `src/db/schema-coverage.test.ts` fails when a
+table the migrations leave behind has no reader left in `src/`, so a dead table cannot outlive its
+code.
+
 `src/lib/data-store.server.ts` provides a typed query-builder interface over `better-sqlite3`.
 `src/lib/data-store.types.ts` holds the corresponding row types.
 
@@ -36,7 +40,7 @@ erDiagram
 | `risk_acceptances` | Accepted risks / repo learning |
 | `category_score_history` / `arch_scans` / `fix_cache` / `ai_test_cache` / `ai_usage` | Trend, caching, and usage bookkeeping |
 | `rate_limit_hits` / `short_locks` | Rate limiting and scheduled-work locks |
-| `fix_recoveries` / `launch_reports` / `marketing_articles` | Remediation recovery, shareable reports, and project-site content |
+| `fix_recoveries` / `launch_reports` | Remediation recovery and shareable reports |
 
 ## Security model
 

@@ -2,7 +2,7 @@
 
 ```
 src/
-  routes/           Page routes (file-based) — marketing + app, no auth split
+  routes/           Page routes (file-based) — app + reference, no auth split
     repo.$repoId.*  Per-repo scan / fix / sandbox / report
   components/       React UI
   ai/               Router + providers + agents

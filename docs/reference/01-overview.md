@@ -24,7 +24,7 @@ hygiene, security middleware, and evidence-backed findings.
 
 | Path            | What it is                                                          |
 | --------------- | ------------------------------------------------------------------- |
-| `src/routes/`   | UI (TanStack Start) — marketing pages and the app, no auth split    |
+| `src/routes/`   | UI (TanStack Start) — app + reference pages, no auth split          |
 | `src/lib/`      | Server logic — scan, fix, sandbox, database                         |
 | `src/ai/`       | AI router + providers (deepseek, anthropic, openai, gemini, cursor) |
 | `src/db/`       | SQLite schema, migrations, query client                             |

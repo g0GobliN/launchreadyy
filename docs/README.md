@@ -6,7 +6,7 @@ one operator and no external application database.
 
 | Component       | What it is                                                 |
 | --------------- | ---------------------------------------------------------- |
-| `src/routes/`   | Marketing + app UI (React / TanStack Start), no auth split |
+| `src/routes/`   | App + reference UI (React / TanStack Start), no auth split |
 | `src/lib/`      | Scan, fix, sandbox, jobs                                   |
 | `src/db/`       | SQLite schema, migrations, query client                    |
 | `src/ai/`       | AI router + providers                                      |
