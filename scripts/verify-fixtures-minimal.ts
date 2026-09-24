@@ -2,7 +2,7 @@
  * CI-friendly dry-run over fixtures/minimal — lists stacks and asserts detection only.
  * Heavy Docker proof is `npm run verify:tools` (needs a daemon; see docs/guides/production.md).
  *
- * Usage: npm run verify:fixtures
+ * Usage: npm run test:fixtures (via its second half; this script is not a standalone command)
  */
 
 import { readdirSync, statSync, readFileSync } from "node:fs";

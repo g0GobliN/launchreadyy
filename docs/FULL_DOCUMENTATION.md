@@ -745,19 +745,48 @@ LaunchReadyy Community is distributed under Apache-2.0 and is designed to run on
 controlled by its operator. Third-party tools, rules, and data must have terms compatible with
 source distribution and self-hosted execution.
 
+## This project's license
+
+| Component                                                                                     | License                                            |
+| --------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| LaunchReadyy Community — server, scanner engine, CLI, self-hosted UI, provider adapters, docs | Apache-2.0                                         |
+| LaunchReadyy name, logos in `public/logo/`, and other brand assets                            | Not covered by the code license; see TRADEMARKS.md |
+| Small standalone SDKs or libraries, if published later                                        | MIT, where maximum adoption matters                |
+
+Apache-2.0 was chosen over MIT because it adds an explicit patent grant and a patent-litigation
+termination clause, which fits a product intended for organizational use. The trade-offs are
+notice obligations: distributions include `LICENSE` and `NOTICE`, and modified versions must carry
+prominent change notices.
+
+The license applies to the code, not to who may operate it. Anyone may self-host, modify, or run
+LaunchReadyy Community as a hosted service, including commercially. The trademark policy in
+`TRADEMARKS.md` is the separate mechanism that keeps a third party from presenting their service as
+the official project.
+
+Because the core stays Apache-2.0 permanently, contributions are accepted inbound-equals-outbound
+under the same license and no contributor license agreement is required. A CLA would only be needed
+if the project later intended to relicense the same core code under non-open-source terms.
+
+CI enforces this section. `npm run verify:licensing` fails if `LICENSE`, `NOTICE`, or
+`TRADEMARKS.md` is missing or emptied, if `LICENSE` no longer contains the Apache-2.0 terms, if the
+`NOTICE` stops pointing at the trademark policy, if any project `package.json` or `Cargo.toml`
+declares a license other than Apache-2.0, or if an npm `files` allowlist would drop `NOTICE` from a
+published tarball. Repositories under `fixtures/` are excluded: they simulate arbitrary user
+projects that may legitimately carry other licenses, and the scanner is expected to report them.
+
 ## Review policy
 
 Review the engine, rule set, vulnerability data, and any downloaded assets separately. They may
 use different licenses. Prefer dependencies that operators may install and run without obtaining
 an additional commercial agreement.
 
-| License class | General policy |
-| ------------- | -------------- |
-| MIT, Apache-2.0, BSD | Allowed; preserve required notices |
-| LGPL-2.1, MPL-2.0 | Review how the component is distributed and modified |
-| GPL-3.0 | Review distribution and process-boundary obligations before adoption |
-| AGPL-3.0 | Avoid for application-integrated services unless obligations are explicitly accepted |
-| Field-of-use or service restrictions | Do not bundle or enable by default without terms covering Community's use |
+| License class                        | General policy                                                                       |
+| ------------------------------------ | ------------------------------------------------------------------------------------ |
+| MIT, Apache-2.0, BSD                 | Allowed; preserve required notices                                                   |
+| LGPL-2.1, MPL-2.0                    | Review how the component is distributed and modified                                 |
+| GPL-3.0                              | Review distribution and process-boundary obligations before adoption                 |
+| AGPL-3.0                             | Avoid for application-integrated services unless obligations are explicitly accepted |
+| Field-of-use or service restrictions | Do not bundle or enable by default without terms covering Community's use            |
 
 Apache-2.0 dependencies are preferred when practical because the license includes an explicit
 patent grant.
@@ -767,14 +796,14 @@ patent grant.
 These tools have permissive engine licenses. Their notices and any separately licensed rule or
 data packages still need review when added to a distributed image or installer.
 
-| Tool | License | Role |
-| ---- | ------- | ---- |
-| osv-scanner | Apache-2.0 | Dependency vulnerability scanning |
-| Trivy | Apache-2.0 | Container and infrastructure configuration scanning |
-| Gitleaks | MIT | Secret detection |
-| Zizmor | MIT | GitHub Actions workflow security |
-| actionlint | MIT | GitHub Actions correctness |
-| Opengrep | LGPL-2.1 | Semgrep-compatible analysis engine |
+| Tool        | License    | Role                                                |
+| ----------- | ---------- | --------------------------------------------------- |
+| osv-scanner | Apache-2.0 | Dependency vulnerability scanning                   |
+| Trivy       | Apache-2.0 | Container and infrastructure configuration scanning |
+| Gitleaks    | MIT        | Secret detection                                    |
+| Zizmor      | MIT        | GitHub Actions workflow security                    |
+| actionlint  | MIT        | GitHub Actions correctness                          |
+| Opengrep    | LGPL-2.1   | Semgrep-compatible analysis engine                  |
 
 Community currently performs its core dependency, secret, workflow, container, and code-pattern
 checks with repository-owned rules. This keeps the default scan available on every installation
@@ -828,21 +857,111 @@ should review the licenses of the exact dependencies and assets they ship.
 
 # Appendix A — NPM scripts
 
+Every command in `package.json`, in the order they are useful, with the prerequisites that make
+them fail. Commands that need an external tool check for it first (`scripts/preflight.mjs`, wired
+through npm `pre*` hooks) and print what is missing, so a failure names the cause instead of a stack
+trace from inside a dependency.
+
+A one-time prerequisite for a full local setup:
+
+```bash
+nvm use                        # Node 22 (.nvmrc); engines requires ^20.19 or >=22.13
+npm install
+npx playwright install chromium # only for test:e2e:smoke
+```
+
+The readiness indexer is a Rust crate compiled to WebAssembly, and `rust/crates/indexer/pkg/` is
+build output. `npm run build` builds it when it is missing or stale, and `npm run typecheck` needs
+it to exist — see `scripts/ensure-wasm.mjs`.
+
+## Everyday
+
+| Script | Purpose | Needs |
+| ------ | ------- | ----- |
+| `npm run dev` | Vite dev server (default `http://localhost:5174`) | Node 22, indexer artifact |
+| `npm run build` | Build the indexer, the app, and the CLI | Rust + wasm-pack |
+| `npm run start` | Run the built server (`dist/server/server.js`) | `npm run build` first |
+| `npm run preview` | Serve the production build | `npm run build` first |
+| `npm run lint` | ESLint over the repository | — |
+| `npm run typecheck` | `tsc --noEmit` | indexer artifact |
+| `npm test` | Vitest unit suite | — |
+| `npm run format` | Prettier over code; docs, fixtures, and the scan baseline are excluded | — |
+
+## Gates CI runs
+
+| Script | Purpose | Needs |
+| ------ | ------- | ----- |
+| `npm run test:fixtures` | Fixture matrix plus the minimal-fixture smoke check | — |
+| `npm run test:production-start` | Boots the built server and asserts it answers | `npm run build` first |
+| `npm run docs:check` | Fails when `FULL_DOCUMENTATION.md` has drifted | — |
+| `npm run verify:licensing` | Fails when LICENSE/NOTICE/TRADEMARKS or manifest license metadata drifts | — |
+| `npm run rust:test` | Rust crate tests | Rust |
+| `npm run rust:build` | Native indexer used by the parity suites and benchmarks | Rust |
+| `npm run wasm:build` | WebAssembly indexer artifact | Rust + wasm-pack |
+
+## Optional: verification and audits
+
+These are not part of `npm test`. They run real toolchains and take minutes.
+
+| Script | Purpose | Needs |
+| ------ | ------- | ----- |
+| `npm run test:e2e:smoke` | Playwright smoke test of the running app | Playwright's Chromium (`npx playwright install chromium`) |
+| `npm run verify:tools` | Generates CI/Dockerfile fixes into real cloned repositories and executes them | Docker, network, `.scratch/real-fixtures` populated, up to ~15 min for the first case per language, much less once cached — add `-- --reporter=verbose` to see which case is running |
+| `npm run verify:mobile` | Scans generated native-mobile, Ktor, and Dart projects and reports what the scanner got wrong | ~4 min, no external services |
+
+### Caching in `verify:tools`
+
+Each case runs in a container that is created and destroyed, so three things are cached between
+runs: the images, each language's dependency downloads, and the `docker build` layers. A cold first
+run is the slow one; every later run reuses what it fetched.
+
+| Cache | Held in | Dropped by |
+| ----- | ------- | ---------- |
+| Dependency downloads (npm, pip, Go modules, cargo, Maven, Gradle, NuGet, hex, Composer, gems) | Docker named volumes named `lr-audit-cache-*` | `LR_AUDIT_CACHE_RESET=1` |
+| Toolchain images | Docker's image store, pulled once per run before the first case | `docker image rm` |
+| `docker build` layers | Docker's build cache, importable from `.scratch/docker-build-cache` | `docker builder prune`, or deleting that directory |
+
+Switches, all defaulting to the cached behaviour:
+
+- `LR_AUDIT_CACHE=0` — no toolchain cache volumes.
+- `LR_AUDIT_BUILD_CACHE=off|read|read-write` — the build layer cache. `read` (the default) imports
+  the durable copy if it exists; `read-write` also exports it, so running once with `read-write`
+  creates a cache that survives `docker builder prune` and a fresh CI machine.
+- `LR_AUDIT_WARM=0` — skip the up-front image pull. Filtered runs (`-- -t "eslint"`) want this:
+  otherwise they pull every language's images for the sake of one case.
+- `LR_AUDIT_PULL=0` — no pulls in the harness at all.
+
+## Optional: sandbox template
+
+| Script | Purpose | Needs |
+| ------ | ------- | ----- |
+| `npm run e2b:build:dev` | Build the E2B template with development settings | `E2B_API_KEY` |
+| `npm run e2b:build:prod` | Build the E2B template for production | `E2B_API_KEY` |
+
+Sandbox verification is optional. Without a key, scans and fixes still run and verification reports
+itself as skipped.
+
+## Benchmarks
+
+| Script | Purpose | Needs |
+| ------ | ------- | ----- |
+| `npm run bench:indexer` | In-memory TypeScript vs Rust indexing | indexer artifact |
+| `npm run bench:imports` | Import extraction: Rust vs the TypeScript reference | `npm run rust:build` |
+| `npm run bench:indexer:disk` | Disk traversal plus indexing, TypeScript vs Rust | `npm run rust:build` |
+
+## Documentation
+
 | Script | Purpose |
 | ------ | ------- |
-| `npm run dev` | Vite dev server |
-| `npm run build` | Production build |
-| `npm run start` | Start the Node.js server |
-| `npm test` | Vitest unit suite |
-| `npm run test:fixtures` | Minimal multi-lang fixtures |
-| `npm run test:production-start` | Smoke-tests the built server actually answers requests |
-| `npm run test:e2e:smoke` | Playwright smoke |
-| `npm run verify:tools` | Docker fix-tool matrix |
-| `npm run e2b:build:prod` | Build E2B template |
-| `npm run docs:build` | Regenerate `FULL_DOCUMENTATION.md` |
-| `npm run docs:check` | Fail if full doc drifted |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run lint` | ESLint |
+| `npm run docs:build` | Regenerate `docs/FULL_DOCUMENTATION.md` from `docs/reference/` |
+| `npm run docs:check` | Fail if that file drifted (CI runs this) |
+
+## Not commands
+
+`scripts/preflight.mjs` is invoked by the `pre*` hooks (`predev`, `prebuild`, `pretest`,
+`prelint`, `pretest:e2e:smoke`, `preverify:tools`, `pree2b:build:dev`, `pree2b:build:prod`), which
+is why they show up in `npm run`. They exist to turn three specific failures into instructions:
+Node too old, Playwright's browser missing, Docker unavailable, `E2B_API_KEY` unset.
 
 ---
 
