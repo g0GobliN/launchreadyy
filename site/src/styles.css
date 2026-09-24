@@ -1,6 +1,6 @@
 :root {
   color-scheme: dark;
-  font-family: "Manrope", system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   color: #f4f5f3;
   background: #08090a;
   font-synthesis: none;
@@ -63,7 +63,7 @@ img {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  font-family: "Newsreader", serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -183,7 +183,7 @@ h1,
 h2,
 h3 {
   margin: 0;
-  font-family: "Newsreader", Georgia, serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-weight: 500;
 }
 .hero h1 {
@@ -453,7 +453,8 @@ h3 {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.88em;
 }
-.prose pre {
+.prose pre,
+.code-block pre {
   overflow-x: auto;
   margin: 22px 0;
   padding: 22px;
@@ -461,7 +462,8 @@ h3 {
   border-radius: 10px;
   background: #050606;
 }
-.prose pre code {
+.prose pre code,
+.code-block pre code {
   color: var(--green);
   font-size: 12px;
   line-height: 1.85;
@@ -499,7 +501,7 @@ h3 {
   transform: rotate(18deg);
 }
 .score-ring span {
-  font-family: "Newsreader", serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 38px;
   transform: rotate(-18deg);
 }
@@ -525,7 +527,7 @@ footer {
   gap: 60px;
 }
 .footer-brand {
-  font-family: "Newsreader", serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 22px;
 }
 .footer-grid p {
@@ -563,7 +565,392 @@ footer {
   font-size: 10px;
 }
 
+.footer-brand-column {
+  max-width: 320px;
+}
+
+/* Star on GitHub — a link first, a counter second. The number only appears when the API answered,
+   so the control never shows a figure it could not confirm. */
+.star-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: #dce0de;
+  font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background 0.2s;
+}
+.star-button:hover {
+  border-color: rgba(49, 230, 160, 0.45);
+  background: rgba(49, 230, 160, 0.08);
+  color: var(--green);
+}
+.star-button svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+.star-count {
+  padding-left: 9px;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  color: #9aa09d;
+  font:
+    500 12px "JetBrains Mono",
+    monospace;
+}
+.star-button:hover .star-count {
+  color: var(--green);
+}
+.star-button.compact {
+  padding: 7px 13px;
+  font-size: 12px;
+}
+.star-button.compact svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* Documentation page — sticky table of contents beside a single reading column. Reference content
+   stays one column wide because tables and command blocks stop being readable when split. */
+.docs-shell {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  gap: 72px;
+  border-top: 1px solid var(--line);
+}
+.docs-nav {
+  position: sticky;
+  top: 96px;
+  align-self: start;
+  padding-top: 34px;
+}
+.docs-nav-title,
+.code-label {
+  font:
+    500 10px/1 "JetBrains Mono",
+    monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6d7370;
+}
+.docs-nav ol {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: docs;
+}
+.docs-nav li {
+  counter-increment: docs;
+}
+.docs-nav a {
+  display: block;
+  padding: 7px 0 7px 14px;
+  border-left: 1px solid rgba(255, 255, 255, 0.09);
+  color: #868c89;
+  font-size: 13px;
+  text-decoration: none;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.docs-nav a::before {
+  content: counter(docs, decimal-leading-zero) "  ";
+  color: #5b615e;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+}
+.docs-nav a:hover {
+  color: #dce0de;
+}
+.docs-nav a.active {
+  border-left-color: var(--green);
+  color: #f4f5f3;
+}
+.docs-nav a.active::before {
+  color: var(--green);
+}
+
+.docs-body {
+  max-width: 720px;
+  padding-top: 34px;
+}
+.docs-section {
+  padding-bottom: 52px;
+  margin-bottom: 52px;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 96px;
+}
+.docs-section:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+.docs-section h2 {
+  font-size: 30px;
+}
+.docs-section p,
+.docs-list li {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.docs-section p {
+  margin: 18px 0 0;
+}
+.docs-section a {
+  color: #dce0de;
+  text-underline-offset: 4px;
+}
+.docs-section strong {
+  color: #e6e9e7;
+  font-weight: 600;
+}
+.docs-section code,
+.docs-faq-answer code {
+  color: #bdc4c1;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.88em;
+}
+.docs-lead {
+  margin: 18px 0 0;
+  color: #a5aaa8;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.docs-list {
+  margin: 22px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 10px;
+}
+.docs-note {
+  margin-top: 22px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--green);
+  border-radius: 8px;
+  background: var(--surface);
+  color: #a5aaa8;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.docs-footnote {
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.docs-table-wrap {
+  margin-top: 24px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.docs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.docs-table th,
+.docs-table td {
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+.docs-table tr:last-child th,
+.docs-table tr:last-child td {
+  border-bottom: 0;
+}
+.docs-table thead th {
+  background: #0b0c0d;
+  color: #6d7370;
+  font:
+    500 10px/1.4 "JetBrains Mono",
+    monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.docs-table tbody th {
+  width: 34%;
+  color: #e6e9e7;
+}
+.docs-table td {
+  color: var(--muted);
+  line-height: 1.7;
+}
+.docs-faq {
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.docs-faq details {
+  border-bottom: 1px solid var(--line);
+}
+.docs-faq summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 0;
+  color: #e6e9e7;
+  font-size: 14.5px;
+  cursor: pointer;
+  list-style: none;
+}
+.docs-faq summary::-webkit-details-marker {
+  display: none;
+}
+.docs-faq summary::before {
+  content: "+";
+  flex: none;
+  width: 14px;
+  color: var(--green);
+  font-family: "JetBrains Mono", monospace;
+}
+.docs-faq details[open] summary::before {
+  content: "−";
+}
+.docs-faq-answer {
+  padding: 0 0 20px 26px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+.docs-cards {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--line);
+}
+.docs-card {
+  display: grid;
+  gap: 8px;
+  padding: 20px 22px;
+  background: #0b0c0d;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.docs-card:hover {
+  background: var(--surface-2);
+}
+.docs-card-title {
+  color: #e6e9e7;
+  font-size: 14px;
+  font-weight: 600;
+}
+.docs-card-body {
+  color: #7f8582;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.code-block {
+  position: relative;
+  margin-top: 24px;
+}
+.code-label {
+  margin-bottom: 12px;
+}
+.code-block pre {
+  margin: 0;
+  padding-right: 84px;
+}
+.code-copy {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(10, 11, 12, 0.9);
+  color: #9aa09d;
+  font:
+    500 11px "JetBrains Mono",
+    monospace;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.code-copy:hover {
+  color: var(--green);
+  border-color: rgba(49, 230, 160, 0.4);
+}
+
 @media (max-width: 900px) {
+  /* The header collapses here rather than at 680px: brand, three nav links, the star control, and
+     the GitHub button already fill the row at ~750px, which left the brand touching the first link
+     and wrapped "View on GitHub" onto two lines. */
+  .menu-button {
+    display: block;
+  }
+  .nav {
+    position: absolute;
+    top: 66px;
+    left: 0;
+    right: 0;
+    display: none;
+    padding: 18px 20px 24px;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: 1px solid var(--line);
+    background: #0a0b0c;
+  }
+  .nav.open {
+    display: flex;
+  }
+  .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .nav .star-button {
+    width: 100%;
+    justify-content: center;
+  }
+  .github-link {
+    justify-content: center;
+    margin-top: 5px;
+  }
+  .docs-shell {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .docs-nav {
+    position: static;
+    padding-top: 26px;
+  }
+  .docs-nav ol {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+  }
+  .docs-nav a {
+    padding: 4px 0;
+    border-left: 0;
+    border-bottom: 1px solid transparent;
+  }
+  .docs-nav a.active {
+    border-bottom-color: var(--green);
+  }
+  .docs-body {
+    padding-top: 26px;
+  }
+  .docs-table tbody th {
+    width: auto;
+  }
   .hero {
     grid-template-columns: 1fr;
     padding-top: 80px;
@@ -602,34 +989,6 @@ footer {
   .footer-bottom {
     width: min(100% - 32px, 1120px);
   }
-  .menu-button {
-    display: block;
-  }
-  .nav {
-    position: absolute;
-    top: 66px;
-    left: 0;
-    right: 0;
-    display: none;
-    padding: 18px 20px 24px;
-    align-items: stretch;
-    flex-direction: column;
-    gap: 8px;
-    border-bottom: 1px solid var(--line);
-    background: #0a0b0c;
-  }
-  .nav.open {
-    display: flex;
-  }
-  .nav-link {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-  }
-  .github-link {
-    justify-content: center;
-    margin-top: 5px;
-  }
   .hero {
     min-height: auto;
     padding: 72px 0;
@@ -645,8 +1004,10 @@ footer {
     align-items: stretch;
     flex-direction: column;
   }
-  .button {
+  .button,
+  .star-button {
     width: 100%;
+    justify-content: center;
   }
   .text-link {
     min-height: 44px;
@@ -695,6 +1056,24 @@ footer {
   .prose section:nth-child(even) {
     padding: 34px 0 38px;
     border-left: 0;
+  }
+  .docs-section {
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+  }
+  .docs-section h2 {
+    font-size: 26px;
+  }
+  .docs-cards {
+    grid-template-columns: 1fr;
+  }
+  .docs-table th,
+  .docs-table td {
+    padding: 12px 14px;
+  }
+  .docs-section,
+  .docs-nav {
+    scroll-margin-top: 80px;
   }
   .footer-links {
     gap: 36px;

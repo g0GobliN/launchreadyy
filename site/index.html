@@ -4,15 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#08090a" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="robots" content="index, follow" />
     <meta
       name="description"
-      content="LaunchReadyy Community is a self-hosted production-readiness and verification tool for software repositories."
+      content="LaunchReadyy Community is an open-source, self-hosted production-readiness and verification tool for software repositories."
     />
+
+    <!-- Origin-dependent tags: the placeholder in each value is filled at build time from the site
+         URL setting. When that setting is unset, vite.config.ts removes these lines rather than
+         shipping a guessed domain. The router keeps them current per route. -->
+    <link rel="canonical" href="%SITE_URL%/" />
+    <meta property="og:url" content="%SITE_URL%/" />
+    <meta property="og:image" content="%SITE_URL%/screenshots/readiness.webp" />
+    <meta name="twitter:image" content="%SITE_URL%/screenshots/readiness.webp" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="LaunchReadyy Community" />
+    <meta property="og:title" content="LaunchReadyy Community — Know before you ship" />
+    <meta
+      property="og:description"
+      content="Open-source, self-hosted production-readiness and verification for software repositories."
+    />
+    <meta
+      property="og:image:alt"
+      content="A LaunchReadyy readiness report showing a score with evidence-backed findings."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LaunchReadyy Community — Know before you ship" />
+    <meta
+      name="twitter:description"
+      content="Open-source, self-hosted production-readiness and verification for software repositories."
+    />
+
     <link rel="icon" type="image/png" href="/logo/mark-tight.png" />
+    <link rel="apple-touch-icon" href="/logo/mark-tight.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <title>LaunchReadyy Community — Know before you ship</title>
