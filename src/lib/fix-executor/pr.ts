@@ -177,7 +177,10 @@ export function buildPrBody(input: {
                   ? "⚠️ not verified"
                   : "⚠️ needs manual step";
             // Skip reasons can carry a provider error verbatim; a stray pipe would break the row.
-            const note = n.note.replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
+            // Backslashes are escaped first, because doing it second would double the backslash
+            // this step just added (`\|` → `\\|`) and the row would lose its separator — the
+            // escape character has to be escaped before the character it escapes.
+            const note = n.note.replace(/\\/g, "\\\\").replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
             return `| ${FIX_LABEL[n.fixId] ?? n.fixId} | ${status} | ${note} |`;
           }),
           ``,

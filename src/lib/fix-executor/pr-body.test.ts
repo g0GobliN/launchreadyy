@@ -22,6 +22,14 @@ const base = {
 // the note text, which meant rewording the real message would break the PR body while these tests
 // stayed green — the failure mode the tests exist to prevent.
 const verified: VerificationNote = sandboxPassedNote(false);
+
+/**
+ * Undo the table-row escaping in one pass.
+ *
+ * One pass matters: replacing `\\` first would then re-process the backslash that the pipe escape
+ * added, so `\|` would come back as `|` only by accident of ordering.
+ */
+const unescapeMarkdown = (text: string): string => text.replace(/\\(.)/g, "$1");
 const skipped = (reason: string): VerificationNote => sandboxSkippedNote(reason);
 
 describe("buildPrBody — sandbox verification disclosure", () => {
@@ -111,6 +119,19 @@ describe("buildPrBody — verification table", () => {
     expect(row).toContain("a \\| b");
     // Only unescaped pipes are cell separators: leading, two dividers, trailing.
     expect(row.match(/(?<!\\)\|/g)).toHaveLength(4);
+  });
+
+  it("escapes a backslash before the pipe it precedes", () => {
+    // A provider error can carry `\|` — an already-escaped pipe, or a Windows path whose final
+    // backslash lands in front of one. Escaping the pipe first turns that into `\\|`, which
+    // markdown reads as a literal backslash followed by a cell separator: the row splits and the
+    // warning ends up in the wrong column.
+    const reason = "provider said: C:\\|prod";
+    const body = buildPrBody({ ...base, verificationNotes: [skipped(reason)] });
+    const row = body.split("\n").find((l) => l.startsWith("| ") && l.includes("not verified"))!;
+
+    expect(row.match(/(?<!\\)\|/g)).toHaveLength(4);
+    expect(unescapeMarkdown(row)).toContain(reason);
   });
 
   it("flattens newlines in a note so they cannot break the table", () => {
